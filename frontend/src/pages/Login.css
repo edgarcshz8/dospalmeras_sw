@@ -1,0 +1,120 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1209 0%, #0f0c08 100%);
+  padding: 24px;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.login-logo-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.2rem;
+  color: var(--gold);
+}
+
+.login-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  color: #64748b;
+  margin-bottom: 32px;
+  letter-spacing: 0.05em;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login-field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.login-field input {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-size: 0.95rem;
+  font-family: 'Raleway', sans-serif;
+  color: #1a202c;
+  transition: border-color 0.15s;
+  outline: none;
+}
+
+.login-field input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+}
+
+.login-error {
+  font-size: 0.82rem;
+  color: var(--danger);
+  text-align: center;
+  background: #fef2f2;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.login-btn {
+  background: var(--gold);
+  color: #1a1209;
+  border: none;
+  border-radius: 8px;
+  padding: 13px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: 'Raleway', sans-serif;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.login-btn:hover:not(:disabled) {
+  background: var(--gold-light);
+}
+
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-back {
+  display: block;
+  text-align: center;
+  margin-top: 24px;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  text-decoration: none;
+}
+
+.login-back:hover {
+  color: var(--gold);
+}
