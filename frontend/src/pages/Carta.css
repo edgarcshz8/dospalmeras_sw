@@ -1,359 +1,314 @@
-/* ═══════════════════════════════════════
-   CARTA — Restaurante Dos Palmeras
-   ═══════════════════════════════════════ */
+/* ══════════════════════════════════════════════
+   CARTA — estilo Mesón Peruano
+   ══════════════════════════════════════════════ */
+
+/* ── Reset de página ── */
+.mp-page {
+  min-height: 100vh;
+  background: #f2f0eb;
+  font-family: 'Raleway', sans-serif;
+  color: #1e1e1e;
+}
 
 /* ── Loading ── */
-.carta-loading {
+.mp-loading {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background: #0c0a07;
+  background: #1e1e1e;
 }
-.carta-loading-dot {
-  width: 36px;
-  height: 36px;
-  border: 2px solid rgba(201,168,76,0.15);
-  border-top-color: #c9a84c;
+.mp-spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: #c41e1e;
   border-radius: 50%;
-  animation: spin 0.85s linear infinite;
+  animation: mp-spin 0.8s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes mp-spin { to { transform: rotate(360deg); } }
 
 
-/* ── Page ── */
-.carta-page {
-  min-height: 100vh;
-  background: #0c0a07;
-  color: #ede8dc;
-  font-family: 'Raleway', sans-serif;
-}
-
-
-/* ═══════════════════════════
-   HERO
-   ═══════════════════════════ */
-.carta-hero {
-  padding: 88px 24px 72px;
+/* ══════════════════════════════════════════════
+   COVER / HERO
+   ══════════════════════════════════════════════ */
+.mp-cover {
+  background: #1e1e1e;
   text-align: center;
+  padding: 80px 24px 0;
   position: relative;
-  background: #0c0a07;
+  /* the SVG wave sits flush at the bottom */
 }
-/* thin gold rule below hero */
-.carta-hero::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 50%;
-  transform: translateX(-50%);
-  width: min(680px, 88%);
-  height: 1px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(201,168,76,0.45) 25%,
-    rgba(201,168,76,0.45) 75%,
-    transparent 100%
-  );
+.mp-cover-inner {
+  padding-bottom: 48px;
 }
-
-.carta-hero-inner { max-width: 600px; margin: 0 auto; }
-
-.carta-tagline {
+.mp-cover-name {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(3.8rem, 11vw, 6.5rem);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 14px;
+}
+.mp-cover-tagline {
+  font-size: 0.72rem;
   font-weight: 300;
-  font-size: 0.7rem;
   letter-spacing: 0.4em;
   text-transform: uppercase;
-  color: #6e6454;
-  margin-bottom: 18px;
+  color: rgba(255,255,255,0.35);
 }
 
-.carta-title {
-  font-family: 'Dancing Script', cursive;
-  font-size: clamp(3.8rem, 10vw, 6.5rem);
-  font-weight: 700;
-  color: #c9a84c;
-  line-height: 1;
-  margin-bottom: 28px;
-}
-
-/* ornament  ─── ◆ ─── */
-.carta-ornament {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-bottom: 22px;
-}
-.carta-ornament--sm .carta-orn-line { width: 36px; }
-
-.carta-orn-line {
+/* SVG wave shared between cover and sections */
+.mp-wave {
   display: block;
-  width: 52px;
-  height: 1px;
-  background: rgba(201,168,76,0.45);
-}
-.carta-orn-gem {
-  font-size: 0.45rem;
-  color: #c9a84c;
-  opacity: 0.85;
-  line-height: 1;
-}
-
-.carta-subtitle {
-  font-weight: 300;
-  font-size: 0.68rem;
-  letter-spacing: 0.42em;
-  text-transform: uppercase;
-  color: #6e6454;
+  width: 100%;
+  height: 48px;
+  margin-bottom: -2px;
 }
 
 
-/* ═══════════════════════════
-   MAIN CONTAINER
-   ═══════════════════════════ */
-.carta-main {
-  max-width: 800px;
+/* ══════════════════════════════════════════════
+   MAIN
+   ══════════════════════════════════════════════ */
+.mp-main {
+  max-width: 960px;
   margin: 0 auto;
-  padding-bottom: 80px;
+  padding: 0 0 64px;
 }
 
 
-/* ═══════════════════════════
-   SECTION BLOCK
-   ═══════════════════════════ */
-.carta-block {
-  /* subtle separator between consecutive blocks */
+/* ══════════════════════════════════════════════
+   SECTION
+   ══════════════════════════════════════════════ */
+.mp-section {
+  margin-top: 48px;
 }
-.carta-block + .carta-block {
-  border-top: 1px solid rgba(255,255,255,0.03);
+.mp-section:first-child {
+  margin-top: 8px;
 }
 
-
-/* ── Section heading — with image ── */
-.carta-sec-head--image {
+/* ── Dark header band ── */
+.mp-sec-header {
+  background: #1e1e1e;
+  display: flex;
+  align-items: stretch;
+  min-height: 185px;
   position: relative;
-  min-height: 230px;
-  background-size: cover;
-  background-position: center;
   overflow: hidden;
 }
-.carta-sec-overlay {
-  position: absolute;
-  inset: 0;
-  /* gradient heavier at bottom so title pops */
-  background: linear-gradient(
-    to bottom,
-    rgba(12,10,7,0.25) 0%,
-    rgba(12,10,7,0.55) 50%,
-    rgba(12,10,7,0.88) 100%
-  );
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 28px;
+.mp-sec-header--plain {
+  min-height: 130px;
 }
 
-/* ── Section heading — flat (no image) ── */
-.carta-sec-head--flat {
-  padding: 44px 40px 18px;
-}
-.carta-sec-rule {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-.carta-sec-line {
-  display: block;
-  flex: 1;
-  height: 1px;
-  background: rgba(201,168,76,0.28);
-}
-
-/* ── Section name ── */
-.carta-sec-name {
-  font-family: 'Playfair Display', serif;
-  font-weight: 400;
-  font-size: 0.92rem;
-  letter-spacing: 0.28em;
-  color: #c9a84c;
-  white-space: nowrap;
-}
-/* on top of image: larger + shadow */
-.carta-sec-name--over {
-  font-size: 1.15rem;
-  letter-spacing: 0.32em;
-  font-weight: 600;
-  color: #e8c97a;
-  text-shadow: 0 2px 18px rgba(0,0,0,0.9);
-}
-
-
-/* ═══════════════════════════
-   MENU ITEMS
-   ═══════════════════════════ */
-.carta-items {
-  padding: 10px 40px 28px;
-}
-
-.carta-item {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.042);
-}
-.carta-item:last-child { border-bottom: none; }
-
-.carta-item-body {
+/* left side: title + subtitle */
+.mp-sec-text {
+  flex: 1 1 55%;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  justify-content: center;
+  padding: 32px 40px;
+}
+
+/* SECTION TITLE — huge, bold, white */
+.mp-sec-title {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  color: #ffffff;
+  letter-spacing: 0.05em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+/* cursive subtitle in red */
+.mp-sec-sub {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #c41e1e;
+  margin-top: 6px;
+}
+
+/* right side: food photo */
+.mp-sec-photo {
+  flex: 0 0 42%;
+  position: relative;
+  overflow: hidden;
+}
+.mp-sec-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* ── Dots separator ── */
+.mp-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 0;
+  background: #f2f0eb;
+}
+.mp-dot {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #1e1e1e;
+  opacity: 0.2;
+}
+
+
+/* ══════════════════════════════════════════════
+   ITEMS
+   ══════════════════════════════════════════════ */
+.mp-sec-body {
+  background: #ffffff;
+  padding: 28px 40px 36px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* 2-column grid */
+.mp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 52px;
+}
+
+.mp-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid #eeebe5;
+}
+.mp-item:last-child { border-bottom: none; }
+
+/* Solo-column span when item is the only one in its row */
+.mp-grid > .mp-item:last-child:nth-child(odd) {
+  grid-column: 1;
+}
+
+.mp-item-info {
   flex: 1;
   min-width: 0;
 }
 
-.carta-item-name {
+.mp-item-name {
   font-family: 'Raleway', sans-serif;
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: #ede8dc;
-  letter-spacing: 0.025em;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #1e1e1e;
   line-height: 1.3;
+  margin: 0 0 4px;
 }
 
-.carta-item-desc {
-  font-size: 0.76rem;
-  color: #6e6454;
-  font-style: italic;
-  font-weight: 300;
-  line-height: 1.45;
-}
-
-.carta-item-price {
+.mp-item-desc {
   font-family: 'Raleway', sans-serif;
-  font-weight: 600;
-  font-size: 0.87rem;
-  color: #c9a84c;
-  white-space: nowrap;
+  font-weight: 400;
+  font-size: 0.73rem;
+  color: #888070;
+  line-height: 1.45;
+  font-style: italic;
+  margin: 0;
+}
+
+/* ── Price badge — red pill ── */
+.mp-badge {
   flex-shrink: 0;
-  letter-spacing: 0.02em;
-}
-
-.carta-empty {
+  display: inline-block;
+  background: #c41e1e;
+  color: #ffffff;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
   font-size: 0.78rem;
-  color: #4e4840;
+  padding: 5px 13px;
+  border-radius: 999px;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  margin-top: 2px;
+}
+
+.mp-empty {
+  font-size: 0.8rem;
+  color: #bbb;
   font-style: italic;
-  padding: 18px 0;
   text-align: center;
+  padding: 20px 0;
+  grid-column: 1 / -1;
 }
 
 
-/* ═══════════════════════════
-   MENÚ DEL DÍA
-   ═══════════════════════════ */
-.carta-daily-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1px;
-  background: rgba(201,168,76,0.08);
-  padding: 0 40px 36px;
-}
-
-.carta-daily-card {
-  background: #121008;
-  padding: 22px 20px 20px;
-  border-top: 2px solid rgba(201,168,76,0.4);
-}
-
-.carta-daily-card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.carta-daily-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: #c9a84c;
-}
-
-.carta-daily-price {
-  font-weight: 700;
-  font-size: 1rem;
-  color: #c9a84c;
-  letter-spacing: 0.01em;
-}
-
-.carta-daily-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.98rem;
-  color: #ede8dc;
-  margin-bottom: 8px;
-  line-height: 1.35;
-}
-
-.carta-daily-desc {
-  font-size: 0.76rem;
-  color: #6e6454;
-  font-style: italic;
-  line-height: 1.5;
-}
-
-
-/* ═══════════════════════════
+/* ══════════════════════════════════════════════
    FOOTER
-   ═══════════════════════════ */
-.carta-footer {
+   ══════════════════════════════════════════════ */
+.mp-footer {
+  background: #1e1e1e;
   text-align: center;
   padding: 44px 24px 52px;
-  border-top: 1px solid rgba(201,168,76,0.12);
+  margin-top: 56px;
 }
-
-.carta-footer-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 1rem;
-  color: #7a7060;
-  letter-spacing: 0.1em;
-  margin: 16px 0 8px;
+.mp-footer-brand {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 10px;
 }
-
-.carta-footer-note {
+.mp-footer-note {
   font-size: 0.66rem;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: #4a4438;
+  color: rgba(255,255,255,0.28);
 }
 
 
-/* ═══════════════════════════
+/* ══════════════════════════════════════════════
    RESPONSIVE
-   ═══════════════════════════ */
-@media (max-width: 620px) {
-  .carta-items,
-  .carta-sec-head--flat {
-    padding-left: 24px;
-    padding-right: 24px;
+   ══════════════════════════════════════════════ */
+@media (max-width: 700px) {
+  .mp-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
-  .carta-daily-grid {
-    padding-left: 24px;
-    padding-right: 24px;
-    grid-template-columns: 1fr 1fr;
+  .mp-grid > .mp-item:last-child:nth-child(odd) {
+    grid-column: 1;
   }
-  .carta-sec-head--image {
-    min-height: 170px;
+  .mp-sec-body {
+    padding: 20px 20px 28px;
+  }
+  .mp-sec-text {
+    padding: 24px 20px;
+  }
+  .mp-sec-photo {
+    flex: 0 0 38%;
   }
 }
 
-@media (max-width: 400px) {
-  .carta-daily-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 500px) {
+  .mp-sec-header {
+    flex-direction: column-reverse;
+    min-height: auto;
   }
-  .carta-items,
-  .carta-sec-head--flat {
-    padding-left: 18px;
-    padding-right: 18px;
+  .mp-sec-header--plain {
+    flex-direction: column;
+  }
+  .mp-sec-photo {
+    flex: none;
+    height: 170px;
+    width: 100%;
+  }
+  .mp-sec-title {
+    font-size: 1.9rem;
+  }
+  .mp-sec-text {
+    padding: 20px 20px 18px;
+  }
+  .mp-cover-name {
+    font-size: 3.2rem;
   }
 }

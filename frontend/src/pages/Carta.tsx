@@ -5,8 +5,20 @@ import './Carta.css';
 
 function formatPrice(price: number | null) {
   if (price == null) return '';
-  return '$ ' + price.toLocaleString('es-CL');
+  return '$ ' + price.toLocaleString('es-CL');
 }
+
+const WAVE = (
+  <svg className="mp-wave" viewBox="0 0 1200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 L1200,0 L1200,14 Q900,52 600,32 Q300,12 0,48 Z" fill="#1e1e1e" />
+  </svg>
+);
+
+const DOTS = (
+  <div className="mp-dots">
+    {[0,1,2,3,4].map(i => <span key={i} className="mp-dot" />)}
+  </div>
+);
 
 export default function Carta() {
   const [sections, setSections] = useState<MenuSection[]>([]);
@@ -25,121 +37,102 @@ export default function Carta() {
 
   if (loading) {
     return (
-      <div className="carta-loading">
-        <div className="carta-loading-dot" />
+      <div className="mp-loading">
+        <div className="mp-spinner" />
       </div>
     );
   }
 
   return (
-    <div className="carta-page">
+    <div className="mp-page">
 
-      {/* ── Hero ── */}
-      <header className="carta-hero">
-        <div className="carta-hero-inner">
-          <p className="carta-tagline">Bienvenidos a</p>
-          <h1 className="carta-title">Dos Palmeras</h1>
-          <div className="carta-ornament">
-            <span className="carta-orn-line" />
-            <span className="carta-orn-gem">◆</span>
-            <span className="carta-orn-line" />
-          </div>
-          <p className="carta-subtitle">Carta de menú</p>
+      {/* ══ COVER ══ */}
+      <header className="mp-cover">
+        <div className="mp-cover-inner">
+          <h1 className="mp-cover-name">Dos Palmeras</h1>
+          <p className="mp-cover-tagline">Carta de menú</p>
         </div>
+        {WAVE}
       </header>
 
-      <main className="carta-main">
+      <main className="mp-main">
 
-        {/* ── Menú del Día ── */}
+        {/* ══ MENÚ DEL DÍA ══ */}
         {dailyMenus.length > 0 && (
-          <section className="carta-block">
-            <div className="carta-sec-head carta-sec-head--flat">
-              <div className="carta-sec-rule">
-                <span className="carta-sec-line" />
-                <h2 className="carta-sec-name">Menú del Día</h2>
-                <span className="carta-sec-line" />
+          <div className="mp-section">
+            <div className="mp-sec-header mp-sec-header--plain">
+              <div className="mp-sec-text">
+                <h2 className="mp-sec-title">Menú del Día</h2>
+                <p className="mp-sec-sub">Fresco y nutritivo</p>
               </div>
             </div>
-
-            <div className="carta-daily-grid">
-              {dailyMenus.map(dm => (
-                <article key={dm.id} className="carta-daily-card">
-                  <header className="carta-daily-card-head">
-                    <span className="carta-daily-label">Menú {dm.slot_number}</span>
-                    {dm.price != null && (
-                      <span className="carta-daily-price">{formatPrice(dm.price)}</span>
-                    )}
-                  </header>
-                  {dm.title && (
-                    <p className="carta-daily-title">{dm.title}</p>
-                  )}
-                  {dm.description && (
-                    <p className="carta-daily-desc">{dm.description}</p>
-                  )}
-                </article>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* ── Secciones ── */}
-        {sections.map(section => (
-          <section key={section.id} className="carta-block">
-
-            {section.image_url ? (
-              <div
-                className="carta-sec-head carta-sec-head--image"
-                style={{ backgroundImage: `url(${section.image_url})` }}
-              >
-                <div className="carta-sec-overlay">
-                  <h2 className="carta-sec-name carta-sec-name--over">
-                    {section.name.toUpperCase()}
-                  </h2>
-                </div>
-              </div>
-            ) : (
-              <div className="carta-sec-head carta-sec-head--flat">
-                <div className="carta-sec-rule">
-                  <span className="carta-sec-line" />
-                  <h2 className="carta-sec-name">{section.name.toUpperCase()}</h2>
-                  <span className="carta-sec-line" />
-                </div>
-              </div>
-            )}
-
-            <div className="carta-items">
-              {section.items && section.items.length > 0 ? (
-                section.items.map(item => (
-                  <div key={item.id} className="carta-item">
-                    <div className="carta-item-body">
-                      <span className="carta-item-name">{item.name}</span>
-                      {item.description && (
-                        <span className="carta-item-desc">{item.description}</span>
+            {DOTS}
+            <div className="mp-sec-body">
+              <div className="mp-grid">
+                {dailyMenus.map(dm => (
+                  <div key={dm.id} className="mp-item">
+                    <div className="mp-item-info">
+                      <p className="mp-item-name">
+                        Menú {dm.slot_number}{dm.title ? ` — ${dm.title}` : ''}
+                      </p>
+                      {dm.description && (
+                        <p className="mp-item-desc">{dm.description}</p>
                       )}
                     </div>
-                    {item.price != null && (
-                      <span className="carta-item-price">{formatPrice(item.price)}</span>
+                    {dm.price != null && (
+                      <span className="mp-badge">{formatPrice(dm.price)}</span>
                     )}
                   </div>
-                ))
-              ) : (
-                <p className="carta-empty">Próximamente</p>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ══ SECCIONES ══ */}
+        {sections.map(section => (
+          <div key={section.id} className="mp-section">
+            <div className={`mp-sec-header${section.image_url ? '' : ' mp-sec-header--plain'}`}>
+              <div className="mp-sec-text">
+                <h2 className="mp-sec-title">{section.name.toUpperCase()}</h2>
+                <p className="mp-sec-sub">Sabor y tradición</p>
+              </div>
+              {section.image_url && (
+                <div className="mp-sec-photo">
+                  <img src={section.image_url} alt={section.name} />
+                </div>
               )}
             </div>
-
-          </section>
+            {DOTS}
+            <div className="mp-sec-body">
+              {section.items && section.items.length > 0 ? (
+                <div className="mp-grid">
+                  {section.items.map(item => (
+                    <div key={item.id} className="mp-item">
+                      <div className="mp-item-info">
+                        <p className="mp-item-name">{item.name}</p>
+                        {item.description && (
+                          <p className="mp-item-desc">{item.description}</p>
+                        )}
+                      </div>
+                      {item.price != null && (
+                        <span className="mp-badge">{formatPrice(item.price)}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="mp-empty">Próximamente</p>
+              )}
+            </div>
+          </div>
         ))}
 
       </main>
 
-      <footer className="carta-footer">
-        <div className="carta-ornament carta-ornament--sm">
-          <span className="carta-orn-line" />
-          <span className="carta-orn-gem">◆</span>
-          <span className="carta-orn-line" />
-        </div>
-        <p className="carta-footer-name">Restaurante Dos Palmeras</p>
-        <p className="carta-footer-note">Todos los precios incluyen IVA</p>
+      <footer className="mp-footer">
+        <p className="mp-footer-brand">Dos Palmeras</p>
+        <p className="mp-footer-note">Todos los precios incluyen IVA</p>
       </footer>
 
     </div>
