@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - postgres_data_2:/var/lib/postgresql/data
+      - postgres_data_v2:/var/lib/postgresql/data
     networks:
       - app
     expose:
@@ -51,7 +51,7 @@ services:
       - app
 
 volumes:
-  postgres_datav2:
+  postgres_data_v2:
   uploads_data:
 
 networks:
