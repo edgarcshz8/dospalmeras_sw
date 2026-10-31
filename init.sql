@@ -1,4 +1,4 @@
--- Restaurante Don Hernán — Esquema de base de datos
+-- Restaurante Dos Palmeras — Esquema de base de datos
 
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,

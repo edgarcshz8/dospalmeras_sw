@@ -35,7 +35,7 @@ export default function Login() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-logo">
-          <span className="login-logo-text">Don Hernán</span>
+          <span className="login-logo-text">Dos Palmeras</span>
         </div>
         <h1 className="login-title">Acceso al Panel</h1>
         <form onSubmit={handleSubmit} className="login-form">

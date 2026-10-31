@@ -12,8 +12,10 @@ services:
     volumes:
       - uploads_data:/app/uploads
     networks:
-      - app
-      - dokploy-network
+      app:
+        aliases:
+          - dospalmeras-api
+      dokploy-network:
     expose:
       - "3001"
 

@@ -1,4 +1,4 @@
-# Restaurante Don Hernán — Sistema de Carta
+# Restaurante Dos Palmeras — Sistema de Carta
 
 ## Stack
 - **Backend:** Node.js + Express + TypeScript
@@ -18,14 +18,14 @@
 
 ```bash
 psql -U postgres
-CREATE DATABASE don_hernan;
+CREATE DATABASE dos_palmeras;
 \q
 ```
 
 ### 2. Crear las tablas
 
 ```bash
-psql -U postgres -d don_hernan -f init.sql
+psql -U postgres -d dos_palmeras -f init.sql
 ```
 
 ### 3. Configurar el backend
@@ -38,7 +38,7 @@ cp .env.example .env
 Edita `.env` con tus datos de PostgreSQL:
 ```
 PORT=3001
-DATABASE_URL=postgresql://postgres:TU_PASSWORD@localhost:5432/don_hernan
+DATABASE_URL=postgresql://postgres:TU_PASSWORD@localhost:5432/dos_palmeras
 JWT_SECRET=pon_un_secreto_largo_aqui
 ```
 

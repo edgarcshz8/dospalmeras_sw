@@ -37,7 +37,7 @@ export default function Carta() {
       <header className="carta-hero">
         <div className="carta-hero-inner">
           <p className="carta-tagline">Bienvenidos a</p>
-          <h1 className="carta-title">Don Hernán</h1>
+          <h1 className="carta-title">Dos Palmeras</h1>
           <div className="carta-divider-gold" />
           <p className="carta-subtitle">Carta de menú</p>
         </div>
@@ -107,7 +107,7 @@ export default function Carta() {
       </main>
 
       <footer className="carta-footer">
-        <p>Restaurante Don Hernán &mdash; Todos los precios incluyen IVA</p>
+        <p>Restaurante Dos Palmeras &mdash; Todos los precios incluyen IVA</p>
       </footer>
     </div>
   );

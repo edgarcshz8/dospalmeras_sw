@@ -433,7 +433,7 @@ export default function Admin() {
       {/* Header */}
       <header className="admin-header">
         <div className="admin-header-left">
-          <span className="admin-logo">Don Hernán</span>
+          <span className="admin-logo">Dos Palmeras</span>
           <span className="admin-header-sep">|</span>
           <span className="admin-header-title">Panel de Administración</span>
         </div>
