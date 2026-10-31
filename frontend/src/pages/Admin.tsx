@@ -302,6 +302,11 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
   };
 
   const uploadImage = async (file: File) => {
+    const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowed.includes(file.type)) {
+      alert('Formato no compatible. Solo se permiten imágenes JPG, PNG, GIF o WEBP.');
+      return;
+    }
     setUploading(true);
     try {
       const form = new FormData();
