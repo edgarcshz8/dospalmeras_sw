@@ -5,7 +5,7 @@ import './Carta.css';
 
 function formatPrice(price: number | null) {
   if (price == null) return '';
-  return '$' + price.toLocaleString('es-CL');
+  return '$ ' + price.toLocaleString('es-CL');
 }
 
 export default function Carta() {
@@ -33,61 +33,85 @@ export default function Carta() {
 
   return (
     <div className="carta-page">
-      {/* Hero */}
+
+      {/* ── Hero ── */}
       <header className="carta-hero">
         <div className="carta-hero-inner">
           <p className="carta-tagline">Bienvenidos a</p>
           <h1 className="carta-title">Dos Palmeras</h1>
-          <div className="carta-divider-gold" />
+          <div className="carta-ornament">
+            <span className="carta-orn-line" />
+            <span className="carta-orn-gem">◆</span>
+            <span className="carta-orn-line" />
+          </div>
           <p className="carta-subtitle">Carta de menú</p>
         </div>
       </header>
 
       <main className="carta-main">
-        {/* Menú del Día */}
+
+        {/* ── Menú del Día ── */}
         {dailyMenus.length > 0 && (
-          <section className="carta-daily-section">
-            <div className="carta-section-header carta-section-header--daily">
-              <h2 className="carta-section-title">Menú del Día</h2>
+          <section className="carta-block">
+            <div className="carta-sec-head carta-sec-head--flat">
+              <div className="carta-sec-rule">
+                <span className="carta-sec-line" />
+                <h2 className="carta-sec-name">Menú del Día</h2>
+                <span className="carta-sec-line" />
+              </div>
             </div>
+
             <div className="carta-daily-grid">
               {dailyMenus.map(dm => (
-                <div key={dm.id} className="carta-daily-card">
-                  <div className="carta-daily-num">Menú {dm.slot_number}</div>
-                  {dm.title && <div className="carta-daily-name">{dm.title}</div>}
+                <article key={dm.id} className="carta-daily-card">
+                  <header className="carta-daily-card-head">
+                    <span className="carta-daily-label">Menú {dm.slot_number}</span>
+                    {dm.price != null && (
+                      <span className="carta-daily-price">{formatPrice(dm.price)}</span>
+                    )}
+                  </header>
+                  {dm.title && (
+                    <p className="carta-daily-title">{dm.title}</p>
+                  )}
                   {dm.description && (
-                    <div className="carta-daily-desc">{dm.description}</div>
+                    <p className="carta-daily-desc">{dm.description}</p>
                   )}
-                  {dm.price != null && (
-                    <div className="carta-daily-price">{formatPrice(dm.price)}</div>
-                  )}
-                </div>
+                </article>
               ))}
             </div>
           </section>
         )}
 
-        {/* Secciones del menú */}
+        {/* ── Secciones ── */}
         {sections.map(section => (
-          <section key={section.id} className="carta-section">
-            <div
-              className="carta-section-header"
-              style={
-                section.image_url
-                  ? { backgroundImage: `url(${section.image_url})` }
-                  : undefined
-              }
-            >
-              <div className="carta-section-overlay">
-                <h2 className="carta-section-title">{section.name.toUpperCase()}</h2>
+          <section key={section.id} className="carta-block">
+
+            {section.image_url ? (
+              <div
+                className="carta-sec-head carta-sec-head--image"
+                style={{ backgroundImage: `url(${section.image_url})` }}
+              >
+                <div className="carta-sec-overlay">
+                  <h2 className="carta-sec-name carta-sec-name--over">
+                    {section.name.toUpperCase()}
+                  </h2>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="carta-sec-head carta-sec-head--flat">
+                <div className="carta-sec-rule">
+                  <span className="carta-sec-line" />
+                  <h2 className="carta-sec-name">{section.name.toUpperCase()}</h2>
+                  <span className="carta-sec-line" />
+                </div>
+              </div>
+            )}
 
             <div className="carta-items">
               {section.items && section.items.length > 0 ? (
-                section.items.map((item, idx) => (
-                  <div key={item.id} className={`carta-item ${idx % 2 === 1 ? 'carta-item--alt' : ''}`}>
-                    <div className="carta-item-left">
+                section.items.map(item => (
+                  <div key={item.id} className="carta-item">
+                    <div className="carta-item-body">
                       <span className="carta-item-name">{item.name}</span>
                       {item.description && (
                         <span className="carta-item-desc">{item.description}</span>
@@ -102,13 +126,22 @@ export default function Carta() {
                 <p className="carta-empty">Próximamente</p>
               )}
             </div>
+
           </section>
         ))}
+
       </main>
 
       <footer className="carta-footer">
-        <p>Restaurante Dos Palmeras &mdash; Todos los precios incluyen IVA</p>
+        <div className="carta-ornament carta-ornament--sm">
+          <span className="carta-orn-line" />
+          <span className="carta-orn-gem">◆</span>
+          <span className="carta-orn-line" />
+        </div>
+        <p className="carta-footer-name">Restaurante Dos Palmeras</p>
+        <p className="carta-footer-note">Todos los precios incluyen IVA</p>
       </footer>
+
     </div>
   );
 }
