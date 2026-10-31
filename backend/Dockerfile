@@ -10,6 +10,5 @@ WORKDIR /app
 COPY package*.json package-lock.json ./
 RUN npm ci --omit=dev
 COPY --from=builder /app/dist ./dist
-RUN mkdir -p uploads
 EXPOSE 3001
 CMD ["sh", "-c", "node dist/seed.js && exec node dist/index.js"]
