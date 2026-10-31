@@ -302,8 +302,12 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
   };
 
   const uploadImage = async (file: File) => {
-    const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    if (!allowed.includes(file.type)) {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    const allowedExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    const ext = '.' + file.name.split('.').pop()?.toLowerCase();
+    const validType = allowedTypes.includes(file.type);
+    const validExt  = allowedExts.includes(ext);
+    if (!validType && !validExt) {
       alert('Formato no compatible. Solo se permiten imágenes JPG, PNG, GIF o WEBP.');
       return;
     }
@@ -355,7 +359,7 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
           <input
             ref={fileRef}
             type="file"
-            accept="image/*"
+            accept=".jpg,.jpeg,.png,.gif,.webp"
             style={{ display: 'none' }}
             onChange={e => { if (e.target.files?.[0]) uploadImage(e.target.files[0]); }}
           />
