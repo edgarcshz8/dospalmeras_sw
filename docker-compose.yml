@@ -1,23 +1,5 @@
 services:
-
-  db:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data_v2:/var/lib/postgresql/data
-    networks:
-      - app
-    expose:
-      - "5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+  # 1) Elimina por completo el servicio "db"
 
   backend:
     build:
@@ -25,16 +7,15 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      DATABASE_URL: ${DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}
       PORT: 3001
-    depends_on:
-      db:
-        condition: service_healthy
+    # 2) Quita el depends_on: db
     volumes:
       - uploads_data:/app/uploads
     networks:
       - app
+      - dokploy-network   # 3) para poder alcanzar bd_dos_palmeras
     expose:
       - "3001"
 
@@ -51,9 +32,10 @@ services:
       - app
 
 volumes:
-  postgres_data_v2:
   uploads_data:
+  # 4) Elimina postgres_data_v2
 
 networks:
   app:
-    driver: bridge
+  dokploy-network:
+    external: true
