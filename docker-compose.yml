@@ -1,5 +1,4 @@
 services:
-  # 1) Elimina por completo el servicio "db"
 
   backend:
     build:
@@ -10,12 +9,11 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}
       PORT: 3001
-    # 2) Quita el depends_on: db
     volumes:
       - uploads_data:/app/uploads
     networks:
       - app
-      - dokploy-network   # 3) para poder alcanzar bd_dos_palmeras
+      - dokploy-network
     expose:
       - "3001"
 
@@ -33,9 +31,9 @@ services:
 
 volumes:
   uploads_data:
-  # 4) Elimina postgres_data_v2
 
 networks:
   app:
+    driver: bridge
   dokploy-network:
     external: true
