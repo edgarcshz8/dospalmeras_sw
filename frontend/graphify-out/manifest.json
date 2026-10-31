@@ -1,0 +1,80 @@
+{
+  "package.json": {
+    "mtime": 1793408140.875633,
+    "seen": 1793414193.5328534,
+    "ast_hash": "1900244988d220c44d0edeec3383f597",
+    "semantic_hash": "1900244988d220c44d0edeec3383f597"
+  },
+  "src/App.tsx": {
+    "mtime": 1793384306.384556,
+    "seen": 1793414193.5328627,
+    "ast_hash": "cd5acfe8f4cb849a8ee09530332e2987",
+    "semantic_hash": "cd5acfe8f4cb849a8ee09530332e2987"
+  },
+  "src/api/client.ts": {
+    "mtime": 1793384286.9503987,
+    "seen": 1793414193.532867,
+    "ast_hash": "dc538192e28ea589455908abc387e753",
+    "semantic_hash": "dc538192e28ea589455908abc387e753"
+  },
+  "src/contexts/AuthContext.tsx": {
+    "mtime": 1793384292.5120587,
+    "seen": 1793414193.5328698,
+    "ast_hash": "127d153e2920346d6c719edf045d103c",
+    "semantic_hash": "127d153e2920346d6c719edf045d103c"
+  },
+  "src/main.tsx": {
+    "mtime": 1793384295.30949,
+    "seen": 1793414193.5328724,
+    "ast_hash": "aa122bdcf833a2c00fdf9ca8e5348675",
+    "semantic_hash": "aa122bdcf833a2c00fdf9ca8e5348675"
+  },
+  "src/pages/Admin.tsx": {
+    "mtime": 1793407968.354278,
+    "seen": 1793414193.5328746,
+    "ast_hash": "b970d7f958e3e013b018598ea131e257",
+    "semantic_hash": "b970d7f958e3e013b018598ea131e257"
+  },
+  "src/pages/Carta.tsx": {
+    "mtime": 1793412553.3467252,
+    "seen": 1793414193.5328767,
+    "ast_hash": "c406f3561932f712617553b7492c936c",
+    "semantic_hash": "c406f3561932f712617553b7492c936c"
+  },
+  "src/pages/Login.tsx": {
+    "mtime": 1793407967.128934,
+    "seen": 1793414193.5328786,
+    "ast_hash": "095073cdb3c011b668ee03859f2905eb",
+    "semantic_hash": "095073cdb3c011b668ee03859f2905eb"
+  },
+  "src/types/index.ts": {
+    "mtime": 1793384283.819921,
+    "seen": 1793414193.5328805,
+    "ast_hash": "ce354ac09419596acaa58d556b33be9e",
+    "semantic_hash": "ce354ac09419596acaa58d556b33be9e"
+  },
+  "tsconfig.json": {
+    "mtime": 1793384267.8927772,
+    "seen": 1793414193.5328827,
+    "ast_hash": "0ae30e40e3c5158b36aa279e47ca6e8c",
+    "semantic_hash": "0ae30e40e3c5158b36aa279e47ca6e8c"
+  },
+  "tsconfig.node.json": {
+    "mtime": 1793384271.234061,
+    "seen": 1793414193.5328848,
+    "ast_hash": "767b2e9abe6452170cdc399ca052cfbc",
+    "semantic_hash": "767b2e9abe6452170cdc399ca052cfbc"
+  },
+  "vite.config.ts": {
+    "mtime": 1793384274.6888902,
+    "seen": 1793414193.532887,
+    "ast_hash": "3f3fbf226291745b5af0d7b7a67c7264",
+    "semantic_hash": "3f3fbf226291745b5af0d7b7a67c7264"
+  },
+  "index.html": {
+    "mtime": 1793412534.3076954,
+    "seen": 1793414193.532889,
+    "ast_hash": "a818c7443a95ad38e0645b99b9734e94",
+    "semantic_hash": "a818c7443a95ad38e0645b99b9734e94"
+  }
+}
