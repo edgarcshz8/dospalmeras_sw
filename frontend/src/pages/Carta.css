@@ -62,7 +62,7 @@
 .mp-wave {
   display: block;
   width: 100%;
-  height: 70px;
+  height: 48px;
   margin-bottom: -2px;
 }
 
@@ -91,9 +91,10 @@
 .mp-sec-header {
   background: #1e1e1e;
   display: flex;
-  align-items: center;
-  min-height: 200px;
+  align-items: stretch;
+  min-height: 185px;
   position: relative;
+  overflow: hidden;
 }
 .mp-sec-header--plain {
   min-height: 140px;
@@ -128,22 +129,18 @@
   margin-top: 6px;
 }
 
-/* right side: food photo — circular */
+/* right side: food photo */
 .mp-sec-photo {
   flex: 0 0 42%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 32px 20px 12px;
+  position: relative;
+  overflow: hidden;
 }
 .mp-sec-photo img {
-  width: min(210px, 85%);
-  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center;
-  border-radius: 50%;
   display: block;
-  box-shadow: 0 6px 36px rgba(0,0,0,0.55);
 }
 
 /* ── Dots separator ── */
@@ -288,11 +285,7 @@
     padding: 24px 20px;
   }
   .mp-sec-photo {
-    flex: 0 0 40%;
-    padding: 16px 20px 16px 8px;
-  }
-  .mp-sec-photo img {
-    width: min(160px, 90%);
+    flex: 0 0 38%;
   }
 }
 
@@ -300,7 +293,6 @@
   .mp-sec-header {
     flex-direction: column;
     min-height: auto;
-    padding-bottom: 8px;
   }
   .mp-sec-header--plain {
     flex-direction: column;
@@ -308,11 +300,7 @@
   .mp-sec-photo {
     flex: none;
     width: 100%;
-    padding: 0 0 16px;
-    justify-content: center;
-  }
-  .mp-sec-photo img {
-    width: 150px;
+    height: 160px;
   }
   .mp-sec-title {
     font-size: 1.9rem;
