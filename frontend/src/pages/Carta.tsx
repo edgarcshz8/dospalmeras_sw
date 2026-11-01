@@ -9,8 +9,8 @@ function formatPrice(price: number | null) {
 }
 
 const WAVE = (
-  <svg className="mp-wave" viewBox="0 0 1200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,0 L1200,0 L1200,14 Q900,52 600,32 Q300,12 0,48 Z" fill="#1e1e1e" />
+  <svg className="mp-wave" viewBox="0 0 1200 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 L1200,0 L1200,28 C880,75 620,10 320,55 C180,72 0,62 0,62 Z" fill="#1e1e1e" />
   </svg>
 );
 
