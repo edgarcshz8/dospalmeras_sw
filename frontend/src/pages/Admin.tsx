@@ -51,6 +51,8 @@ function DailySlot({ slotNum, date, existing, onSaved, onDeleted }: SlotProps) {
       });
       onSaved(res.data);
       setEditing(false);
+    } catch {
+      // 401 handled by response interceptor
     } finally {
       setSaving(false);
     }
@@ -58,9 +60,11 @@ function DailySlot({ slotNum, date, existing, onSaved, onDeleted }: SlotProps) {
 
   const del = async () => {
     if (!existing || !confirm('¿Eliminar este menú?')) return;
-    await api.delete(`/api/daily-menu/${existing.id}`);
-    onDeleted(existing.id);
-    setTitle(''); setDesc(''); setPrice('');
+    try {
+      await api.delete(`/api/daily-menu/${existing.id}`);
+      onDeleted(existing.id);
+      setTitle(''); setDesc(''); setPrice('');
+    } catch {}
   };
 
   if (!editing && !existing) {
@@ -150,6 +154,8 @@ function ItemRow({ item, onUpdated, onDeleted }: ItemRowProps) {
       });
       onUpdated(res.data);
       setEditing(false);
+    } catch {
+      // 401 handled by response interceptor
     } finally {
       setSaving(false);
     }
@@ -157,8 +163,10 @@ function ItemRow({ item, onUpdated, onDeleted }: ItemRowProps) {
 
   const del = async () => {
     if (!confirm(`¿Eliminar "${item.name}"?`)) return;
-    await api.delete(`/api/items/${item.id}`);
-    onDeleted(item.id);
+    try {
+      await api.delete(`/api/items/${item.id}`);
+      onDeleted(item.id);
+    } catch {}
   };
 
   if (editing) {
@@ -235,6 +243,8 @@ function AddItemForm({ sectionId, onAdded }: AddItemFormProps) {
       onAdded(res.data);
       setName(''); setDesc(''); setPrice('');
       setOpen(false);
+    } catch {
+      // 401 handled by response interceptor
     } finally {
       setSaving(false);
     }
@@ -278,9 +288,11 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
 
   const loadItems = async () => {
     if (loadedItems) return;
-    const res = await api.get<MenuItem[]>(`/api/items?sectionId=${section.id}`);
-    setItems(res.data);
-    setLoadedItems(true);
+    try {
+      const res = await api.get<MenuItem[]>(`/api/items?sectionId=${section.id}`);
+      setItems(res.data);
+      setLoadedItems(true);
+    } catch {}
   };
 
   const toggle = async () => {
@@ -290,15 +302,19 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
 
   const saveName = async () => {
     if (!newName.trim()) return;
-    const res = await api.put<MenuSection>(`/api/sections/${section.id}`, { name: newName.trim() });
-    onUpdated(res.data);
-    setEditingName(false);
+    try {
+      const res = await api.put<MenuSection>(`/api/sections/${section.id}`, { name: newName.trim() });
+      onUpdated(res.data);
+      setEditingName(false);
+    } catch {}
   };
 
   const delSection = async () => {
     if (!confirm(`¿Eliminar sección "${section.name}" y todos sus ítems?`)) return;
-    await api.delete(`/api/sections/${section.id}`);
-    onDeleted(section.id);
+    try {
+      await api.delete(`/api/sections/${section.id}`);
+      onDeleted(section.id);
+    } catch {}
   };
 
   const uploadImage = async (file: File) => {
@@ -321,6 +337,8 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
       onUpdated(res.data.section);
+    } catch {
+      // 401 handled by response interceptor
     } finally {
       setUploading(false);
     }
@@ -404,11 +422,11 @@ export default function Admin() {
   const [addingSection, setAddingSection] = useState(false);
 
   useEffect(() => {
-    api.get<MenuSection[]>('/api/sections').then(r => setSections(r.data));
+    api.get<MenuSection[]>('/api/sections').then(r => setSections(r.data)).catch(() => {});
   }, []);
 
   useEffect(() => {
-    api.get<DailyMenu[]>(`/api/daily-menu?date=${date}`).then(r => setDailyMenus(r.data));
+    api.get<DailyMenu[]>(`/api/daily-menu?date=${date}`).then(r => setDailyMenus(r.data)).catch(() => {});
   }, [date]);
 
   const doLogout = () => { logout(); navigate('/login'); };
@@ -416,13 +434,15 @@ export default function Admin() {
   const addSection = async () => {
     if (!newSectionName.trim()) return;
     const maxOrder = sections.reduce((m, s) => Math.max(m, s.display_order), 0);
-    const res = await api.post<MenuSection>('/api/sections', {
-      name: newSectionName.trim(),
-      display_order: maxOrder + 1,
-    });
-    setSections(prev => [...prev, res.data]);
-    setNewSectionName('');
-    setAddingSection(false);
+    try {
+      const res = await api.post<MenuSection>('/api/sections', {
+        name: newSectionName.trim(),
+        display_order: maxOrder + 1,
+      });
+      setSections(prev => [...prev, res.data]);
+      setNewSectionName('');
+      setAddingSection(false);
+    } catch {}
   };
 
   const handleDailyMenuSaved = (dm: DailyMenu) => {
