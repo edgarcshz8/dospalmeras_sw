@@ -14,14 +14,22 @@ const WAVE = (
   </svg>
 );
 
-const SEC_WAVE_CLIP = (
-  <svg aria-hidden="true" focusable="false"
-    style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}>
+/* Clip-path para el borde izquierdo orgánico de la foto */
+const SEC_DEFS = (
+  <svg width="0" height="0" aria-hidden="true" focusable="false"
+    style={{ position: 'absolute', overflow: 'hidden' }}>
     <defs>
-      <clipPath id="sec-wave" clipPathUnits="objectBoundingBox">
-        <path d="M 0 0 L 0.64 0 C 0.75 0.10 0.70 0.30 0.55 0.50 C 0.42 0.63 0.72 0.80 0.61 1 L 0 1 Z" />
+      <clipPath id="photo-left-curve" clipPathUnits="objectBoundingBox">
+        <path d="M 0.18 0 C 0.04 0.35 0.04 0.65 0.18 1 L 1 1 L 1 0 Z" />
       </clipPath>
     </defs>
+  </svg>
+);
+
+/* Onda inferior del header de sección */
+const SEC_WAVE_BOTTOM = (
+  <svg className="mp-sec-wave-btm" viewBox="0 0 1200 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,50 L0,28 C400,6 800,42 1200,16 L1200,50 Z" fill="#f2f0eb" />
   </svg>
 );
 
@@ -56,7 +64,7 @@ export default function Carta() {
 
   return (
     <div className="mp-page">
-      {SEC_WAVE_CLIP}
+      {SEC_DEFS}
 
       {/* ══ COVER ══ */}
       <header className="mp-cover">
@@ -77,6 +85,7 @@ export default function Carta() {
                 <h2 className="mp-sec-title">Menú del Día</h2>
                 <p className="mp-sec-sub">Fresco y nutritivo</p>
               </div>
+              {SEC_WAVE_BOTTOM}
             </div>
             {DOTS}
             <div className="mp-sec-body">
@@ -114,6 +123,7 @@ export default function Carta() {
                   <img src={section.image_url} alt={section.name} />
                 </div>
               )}
+              {SEC_WAVE_BOTTOM}
             </div>
             {DOTS}
             <div className="mp-sec-body">
