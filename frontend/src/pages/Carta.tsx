@@ -14,6 +14,17 @@ const WAVE = (
   </svg>
 );
 
+const SEC_WAVE_CLIP = (
+  <svg aria-hidden="true" focusable="false"
+    style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}>
+    <defs>
+      <clipPath id="sec-wave" clipPathUnits="objectBoundingBox">
+        <path d="M 0 0 L 0.64 0 C 0.75 0.10 0.70 0.30 0.55 0.50 C 0.42 0.63 0.72 0.80 0.61 1 L 0 1 Z" />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
 const DOTS = (
   <div className="mp-dots">
     {[0,1,2,3,4].map(i => <span key={i} className="mp-dot" />)}
@@ -45,6 +56,7 @@ export default function Carta() {
 
   return (
     <div className="mp-page">
+      {SEC_WAVE_CLIP}
 
       {/* ══ COVER ══ */}
       <header className="mp-cover">
