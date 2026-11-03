@@ -142,20 +142,36 @@
 
 @media (max-width: 520px) {
   .dark {
-    min-height: 155px;
+    min-height: 165px;
   }
   .text {
-    padding: 18px 18px 60px;
+    padding: 14px 14px 70px;
   }
-  /* Hide photo on small phones — no space to show it without overlapping text */
+  .title {
+    font-size: clamp(1.5rem, 6.5vw, 2.2rem);
+    line-height: 1;
+  }
+  .subtitle {
+    font-size: clamp(1.1rem, 4.5vw, 1.4rem);
+    margin-top: 5px;
+  }
   .photo {
-    display: none;
+    width: 86px;
+    height: 86px;
+    top: 10px;
+    border-width: 3px;
   }
-  /* Reset reserved padding since photo is gone */
+  .photoRight {
+    right: 8px;
+  }
+  .photoLeft {
+    left: 8px;
+  }
+  /* Reserve space beside photo — must come after .text rule */
   .textPhotoRight {
-    padding-right: 18px;
+    padding-right: 102px;
   }
   .textPhotoLeft {
-    padding-left: 18px;
+    padding-left: 102px;
   }
 }
