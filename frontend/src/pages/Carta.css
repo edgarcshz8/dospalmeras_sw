@@ -1,11 +1,11 @@
 /* ══════════════════════════════════════════════
-   CARTA — estilo Mesón Peruano
+   CARTA — Modern Organic Gastronomic
    ══════════════════════════════════════════════ */
 
 /* ── Reset de página ── */
 .mp-page {
   min-height: 100vh;
-  background: #f2f0eb;
+  background: #f5f2ec;
   font-family: 'Raleway', sans-serif;
   color: #1e1e1e;
 }
@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #1e1e1e;
+  background: #1a1a1a;
 }
 .mp-spinner {
   width: 38px;
@@ -33,11 +33,10 @@
    COVER / HERO
    ══════════════════════════════════════════════ */
 .mp-cover {
-  background: #1e1e1e;
+  background: #1a1a1a;
   text-align: center;
   padding: 80px 24px 0;
   position: relative;
-  /* the SVG wave sits flush at the bottom */
 }
 .mp-cover-inner {
   padding-bottom: 48px;
@@ -58,7 +57,6 @@
   color: rgba(255,255,255,0.35);
 }
 
-/* SVG wave shared between cover and sections */
 .mp-wave {
   display: block;
   width: 100%;
@@ -71,9 +69,9 @@
    MAIN
    ══════════════════════════════════════════════ */
 .mp-main {
-  max-width: 960px;
+  max-width: 980px;
   margin: 0 auto;
-  padding: 0 0 64px;
+  padding: 0 0 80px;
 }
 
 
@@ -81,126 +79,195 @@
    SECTION
    ══════════════════════════════════════════════ */
 .mp-section {
-  margin-top: 48px;
+  margin-top: 56px;
 }
 .mp-section:first-child {
   margin-top: 8px;
 }
 
-/* ── Dark header band — fondo negro ancho completo ── */
+/* ── Header negro orgánico — ancho completo ── */
 .mp-sec-header {
-  background: #1e1e1e;
+  background: #1a1a1a;
   display: flex;
-  align-items: stretch;
-  min-height: 185px;
+  align-items: center;
+  min-height: 210px;
   position: relative;
   overflow: hidden;
+  border-radius: 0 0 0 0;
 }
 .mp-sec-header--plain {
-  min-height: 140px;
+  min-height: 150px;
+}
+
+/* Degradado sutil en el header para profundidad */
+.mp-sec-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 50%, rgba(196,30,30,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* left side: title + subtitle */
 .mp-sec-text {
-  flex: 1 1 55%;
+  flex: 1 1 54%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 36px 40px;
+  padding: 36px 32px 50px 44px;
+  position: relative;
+  z-index: 2;
 }
 
-/* SECTION TITLE — huge, bold, white */
+/* SECTION TITLE */
 .mp-sec-title {
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
-  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-size: clamp(2.2rem, 5.5vw, 3.6rem);
   color: #ffffff;
-  letter-spacing: 0.05em;
-  line-height: 1.05;
+  letter-spacing: 0.06em;
+  line-height: 1;
   text-transform: uppercase;
 }
 
-/* cursive subtitle in red */
-.mp-sec-sub {
-  font-family: 'Dancing Script', cursive;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #c41e1e;
-  margin-top: 6px;
+/* Línea decorativa bajo el título */
+.mp-sec-title::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 3px;
+  background: #c41e1e;
+  margin-top: 10px;
+  border-radius: 2px;
 }
 
-/* right side: foto DENTRO del header negro, con borde izquierdo orgánico */
+/* Subtitle cursive */
+.mp-sec-sub {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.55);
+  margin-top: 14px;
+}
+
+/* right side: foto como blob orgánico flotando en el header oscuro */
 .mp-sec-photo {
-  flex: 0 0 45%;
-  overflow: hidden;
-  clip-path: url(#photo-left-curve);
+  flex: 0 0 46%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 28px 18px 8px;
+  position: relative;
+  z-index: 2;
 }
 .mp-sec-photo img {
   width: 100%;
-  height: 100%;
+  height: 178px;
   object-fit: cover;
   object-position: center;
   display: block;
+  border-radius: 62% 38% 55% 45% / 52% 48% 58% 42%;
+  box-shadow: 0 10px 36px rgba(0,0,0,0.55), 0 0 0 3px rgba(255,255,255,0.07);
 }
 
-/* Onda inferior del header — transiciona a blanco de forma orgánica */
+/* Onda inferior multi-pico — transición orgánica al contenido */
 .mp-sec-wave-btm {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 50px;
+  height: 68px;
   z-index: 10;
   pointer-events: none;
   display: block;
 }
 
-/* ── Dots separator ── */
+
+/* ══════════════════════════════════════════════
+   SEPARADOR EDITORIAL
+   ══════════════════════════════════════════════ */
 .mp-dots {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  padding: 14px 0;
-  background: #f2f0eb;
+  gap: 8px;
+  padding: 16px 0 12px;
+  background: #f5f2ec;
+  position: relative;
 }
+
+/* Líneas laterales del separador */
+.mp-dots::before,
+.mp-dots::after {
+  content: '';
+  flex: 1;
+  max-width: 100px;
+  height: 1px;
+  background: rgba(30,30,30,0.12);
+}
+
 .mp-dot {
   display: block;
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #1e1e1e;
-  opacity: 0.2;
+  background: #1a1a1a;
+  opacity: 0.18;
+}
+
+/* Dot central — acento rojo */
+.mp-dot:nth-child(3) {
+  background: #c41e1e;
+  opacity: 0.7;
+  width: 8px;
+  height: 8px;
 }
 
 
 /* ══════════════════════════════════════════════
-   ITEMS
+   ITEMS — layout editorial
    ══════════════════════════════════════════════ */
 .mp-sec-body {
   background: #ffffff;
-  padding: 28px 40px 36px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 30px 44px 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Mancha orgánica decorativa de fondo */
+.mp-sec-body::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: 62% 38% 55% 45% / 52% 48% 58% 42%;
+  background: #c41e1e;
+  opacity: 0.03;
+  pointer-events: none;
 }
 
 /* 2-column grid */
 .mp-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4px 52px;
+  gap: 0 56px;
 }
 
 .mp-item {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 14px;
-  padding: 12px 0;
-  border-bottom: 1px solid #eeebe5;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px dashed #e2ddd5;
+  position: relative;
 }
 .mp-item:last-child { border-bottom: none; }
 
-/* Solo-column span when item is the only one in its row */
 .mp-grid > .mp-item:last-child:nth-child(odd) {
   grid-column: 1;
 }
@@ -213,36 +280,57 @@
 .mp-item-name {
   font-family: 'Raleway', sans-serif;
   font-weight: 700;
-  font-size: 0.88rem;
-  color: #1e1e1e;
+  font-size: 0.92rem;
+  color: #1a1a1a;
   line-height: 1.3;
   margin: 0 0 4px;
+}
+
+/* Punto acento rojo antes del nombre */
+.mp-item-name::before {
+  content: '▸ ';
+  color: #c41e1e;
+  font-size: 0.65rem;
+  vertical-align: middle;
+  margin-right: 2px;
 }
 
 .mp-item-desc {
   font-family: 'Raleway', sans-serif;
   font-weight: 400;
-  font-size: 0.73rem;
-  color: #888070;
-  line-height: 1.45;
+  font-size: 0.74rem;
+  color: #8a7e6e;
+  line-height: 1.5;
   font-style: italic;
   margin: 0;
+  padding-left: 14px;
 }
 
-/* ── Price badge — red pill ── */
+/* ── Precio — speech bubble ── */
 .mp-badge {
+  position: relative;
   flex-shrink: 0;
   display: inline-block;
   background: #c41e1e;
   color: #ffffff;
   font-family: 'Raleway', sans-serif;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 0.78rem;
-  padding: 5px 13px;
-  border-radius: 999px;
+  padding: 5px 13px 6px;
+  border-radius: 14px 14px 14px 0px;
   white-space: nowrap;
   letter-spacing: 0.02em;
-  margin-top: 2px;
+  margin-top: 3px;
+}
+
+/* Cola de la speech bubble */
+.mp-badge::before {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  border-top: 8px solid #c41e1e;
+  border-right: 10px solid transparent;
 }
 
 .mp-empty {
@@ -250,7 +338,7 @@
   color: #bbb;
   font-style: italic;
   text-align: center;
-  padding: 20px 0;
+  padding: 24px 0;
   grid-column: 1 / -1;
 }
 
@@ -259,23 +347,43 @@
    FOOTER
    ══════════════════════════════════════════════ */
 .mp-footer {
-  background: #1e1e1e;
+  background: #1a1a1a;
   text-align: center;
-  padding: 44px 24px 52px;
+  padding: 48px 24px 56px;
   margin-top: 56px;
+  position: relative;
+  overflow: hidden;
 }
+
+/* Forma orgánica decorativa en el footer */
+.mp-footer::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 300px;
+  border-radius: 55% 45% 62% 38% / 48% 52% 48% 52%;
+  background: #c41e1e;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
 .mp-footer-brand {
   font-family: 'Dancing Script', cursive;
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 700;
   color: #ffffff;
   margin-bottom: 10px;
+  position: relative;
 }
 .mp-footer-note {
   font-size: 0.66rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.28);
+  color: rgba(255,255,255,0.25);
+  position: relative;
 }
 
 
@@ -291,13 +399,17 @@
     grid-column: 1;
   }
   .mp-sec-body {
-    padding: 20px 20px 28px;
+    padding: 22px 22px 30px;
   }
   .mp-sec-text {
-    padding: 24px 20px;
+    padding: 28px 20px 50px 28px;
   }
   .mp-sec-photo {
-    flex: 0 0 40%;
+    flex: 0 0 42%;
+    padding: 14px 16px 14px 4px;
+  }
+  .mp-sec-photo img {
+    height: 150px;
   }
 }
 
@@ -306,19 +418,27 @@
     flex-direction: column;
     min-height: auto;
   }
+  .mp-sec-text {
+    padding: 24px 22px 16px;
+  }
   .mp-sec-photo {
     flex: none;
     width: 100%;
-    height: 180px;
-    clip-path: none;
+    padding: 0 24px 20px;
+  }
+  .mp-sec-photo img {
+    width: 100%;
+    height: 200px;
+    border-radius: 42% 58% 45% 55% / 48% 48% 52% 52%;
   }
   .mp-sec-title {
-    font-size: 1.9rem;
-  }
-  .mp-sec-text {
-    padding: 20px 20px 12px;
+    font-size: 2rem;
   }
   .mp-cover-name {
     font-size: 3.2rem;
+  }
+  .mp-dots::before,
+  .mp-dots::after {
+    max-width: 60px;
   }
 }

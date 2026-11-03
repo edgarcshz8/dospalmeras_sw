@@ -14,22 +14,10 @@ const WAVE = (
   </svg>
 );
 
-/* Clip-path para el borde izquierdo orgánico de la foto */
-const SEC_DEFS = (
-  <svg width="0" height="0" aria-hidden="true" focusable="false"
-    style={{ position: 'absolute', overflow: 'hidden' }}>
-    <defs>
-      <clipPath id="photo-left-curve" clipPathUnits="objectBoundingBox">
-        <path d="M 0.18 0 C 0.04 0.35 0.04 0.65 0.18 1 L 1 1 L 1 0 Z" />
-      </clipPath>
-    </defs>
-  </svg>
-);
-
-/* Onda inferior del header de sección */
+/* Onda inferior orgánica multi-peak del header */
 const SEC_WAVE_BOTTOM = (
-  <svg className="mp-sec-wave-btm" viewBox="0 0 1200 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,50 L0,28 C400,6 800,42 1200,16 L1200,50 Z" fill="#f2f0eb" />
+  <svg className="mp-sec-wave-btm" viewBox="0 0 1200 68" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,68 L0,46 C180,14 340,64 520,36 C700,8 860,58 1040,28 C1110,18 1160,36 1200,22 L1200,68 Z" fill="#f2f0eb" />
   </svg>
 );
 
@@ -64,8 +52,6 @@ export default function Carta() {
 
   return (
     <div className="mp-page">
-      {SEC_DEFS}
-
       {/* ══ COVER ══ */}
       <header className="mp-cover">
         <div className="mp-cover-inner">
