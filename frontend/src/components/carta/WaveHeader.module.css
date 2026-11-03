@@ -44,7 +44,14 @@
   padding: 28px 40px 76px 40px;
   position: relative;
   z-index: 2;
-  /* paddingLeft / paddingRight adjusted inline when photo exists */
+}
+
+.textPhotoRight {
+  padding-right: clamp(180px, 22vw, 260px);
+}
+
+.textPhotoLeft {
+  padding-left: clamp(180px, 22vw, 260px);
 }
 
 .title {
@@ -115,6 +122,13 @@
   .text {
     padding: 22px 28px 68px 28px;
   }
+  /* Keep photo padding reserved at tablet — must come after .text rule */
+  .textPhotoRight {
+    padding-right: clamp(150px, 19vw, 200px);
+  }
+  .textPhotoLeft {
+    padding-left: clamp(150px, 19vw, 200px);
+  }
   .photo {
     top: 10px;
   }
@@ -128,21 +142,20 @@
 
 @media (max-width: 520px) {
   .dark {
-    min-height: 170px;
+    min-height: 155px;
   }
   .text {
-    padding: 18px 18px 64px 18px !important;
+    padding: 18px 18px 60px;
   }
+  /* Hide photo on small phones — no space to show it without overlapping text */
   .photo {
-    width: 110px !important;
-    height: 110px !important;
-    top: 8px;
-    border-width: 3px;
+    display: none;
   }
-  .photoRight {
-    right: 10px;
+  /* Reset reserved padding since photo is gone */
+  .textPhotoRight {
+    padding-right: 18px;
   }
-  .photoLeft {
-    left: 10px;
+  .textPhotoLeft {
+    padding-left: 18px;
   }
 }

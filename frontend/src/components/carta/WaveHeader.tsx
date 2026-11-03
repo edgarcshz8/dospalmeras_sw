@@ -47,14 +47,13 @@ export default function WaveHeader({
 
         {/* Text */}
         <div
-          className={styles.text}
-          style={
+          className={`${styles.text} ${
             hasPhoto
               ? photoSide === 'right'
-                ? { paddingRight: 'clamp(200px, 22vw, 260px)' }
-                : { paddingLeft: 'clamp(200px, 22vw, 260px)' }
-              : undefined
-          }
+                ? styles.textPhotoRight
+                : styles.textPhotoLeft
+              : ''
+          }`}
         >
           <h2 className={styles.title}>{title.toUpperCase()}</h2>
           <p className={styles.subtitle}>{subtitle}</p>
