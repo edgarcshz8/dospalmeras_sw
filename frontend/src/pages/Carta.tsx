@@ -206,17 +206,6 @@ export default function Carta() {
           <h1 className={styles.coverName}>Dos Palmeras</h1>
           <p className={styles.coverTagline}>Carta de menú</p>
         </div>
-        <svg
-          className={styles.coverWave}
-          viewBox="0 0 1200 48"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path
-            className={styles.coverWavePath}
-            d="M0,0 L1200,0 L1200,14 Q900,52 600,32 Q300,12 0,48 Z"
-          />
-        </svg>
       </header>
 
       <main className={styles.main} ref={mainRef}>

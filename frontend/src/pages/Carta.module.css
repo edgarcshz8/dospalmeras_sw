@@ -81,18 +81,6 @@
   color: rgba(246, 232, 216, 0.3);
 }
 
-.coverWave {
-  display: block;
-  width: 100%;
-  height: 48px;
-  margin-bottom: -2px;
-  position: relative;
-  z-index: 1;
-}
-
-.coverWavePath {
-  fill: #ffffff;
-}
 
 
 /* ══════════════════════════════════════════════
