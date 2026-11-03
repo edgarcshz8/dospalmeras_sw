@@ -1,0 +1,145 @@
+.header {
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  min-height: 210px;
+  position: relative;
+  overflow: hidden;
+}
+
+.plain {
+  min-height: 150px;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 28% 50%, rgba(227,6,19,0.10) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.swoosh {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.textSide {
+  flex: 1 1 54%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 36px 32px 56px 44px;
+  position: relative;
+  z-index: 2;
+}
+
+.title {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 5.5vw, 3.4rem);
+  color: var(--cream);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.titleLine {
+  display: block;
+  width: 48px;
+  height: 3px;
+  background: var(--accent);
+  margin-top: 10px;
+  border-radius: 2px;
+}
+
+.subtitle {
+  font-family: 'Allura', cursive;
+  font-size: 1.55rem;
+  color: rgba(245, 230, 211, 0.6);
+  margin-top: 10px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.photoSide {
+  flex: 0 0 44%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 28px 18px 8px;
+  position: relative;
+  z-index: 2;
+}
+
+.blobImg {
+  width: 100%;
+  max-width: 260px;
+  height: 178px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 62% 38% 55% 45% / 52% 48% 58% 42%;
+  box-shadow:
+    0 10px 36px rgba(0, 0, 0, 0.55),
+    0 0 0 3px rgba(245, 230, 211, 0.12);
+}
+
+.waveBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 68px;
+  z-index: 10;
+  pointer-events: none;
+  display: block;
+}
+
+.wavePath {
+  fill: var(--carta-section-bg);
+}
+
+@media (max-width: 700px) {
+  .textSide {
+    padding: 28px 20px 56px 28px;
+  }
+  .photoSide {
+    flex: 0 0 42%;
+    padding: 14px 16px 14px 4px;
+  }
+  .blobImg {
+    height: 150px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 500px) {
+  .header {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .textSide {
+    padding: 24px 22px 16px;
+    width: 100%;
+  }
+  .photoSide {
+    flex: none;
+    width: 100%;
+    padding: 0 24px 28px;
+  }
+  .blobImg {
+    width: 100%;
+    height: 200px;
+    max-width: 100%;
+    border-radius: 42% 58% 45% 55% / 48% 48% 52% 52%;
+  }
+  .title {
+    font-size: 2rem;
+  }
+}

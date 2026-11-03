@@ -15,19 +15,27 @@ body {
 }
 
 :root {
+  /* ── Carta / Organic palette ── */
+  --dark: #231f20;
+  --cream: #f5e6d3;
+  --accent: #e30613;
+  --carta-text: #333333;
+  --carta-bg: #ffffff;
+  --carta-section-bg: #faf7f2;
+
+  /* ── Legacy gold (Admin + other pages) ── */
   --gold: #c9a84c;
   --gold-light: #e8c97a;
   --gold-dim: rgba(201, 168, 76, 0.25);
-  --carta-bg: #0f0c08;
-  --carta-surface: #1a1712;
-  --carta-text: #f0ebe0;
-  --carta-muted: #9a9080;
+
+  /* ── Admin ── */
   --admin-bg: #f4f5f7;
   --admin-surface: #ffffff;
   --admin-border: #e2e8f0;
   --admin-text: #1a202c;
   --admin-accent: #7c3aed;
   --admin-accent-hover: #6d28d9;
+
   --danger: #dc2626;
   --success: #16a34a;
 }
