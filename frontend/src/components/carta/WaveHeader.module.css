@@ -1,145 +1,148 @@
-.header {
-  background: var(--dark);
-  display: flex;
-  align-items: center;
-  min-height: 210px;
+/* ── Wrapper: position context for the floating circle photo ── */
+.wrapper {
+  position: relative;
+}
+
+/* ── Dark header area ── */
+.dark {
+  background: var(--menu-dark);
+  min-height: 215px;
   position: relative;
   overflow: hidden;
 }
 
 .plain {
-  min-height: 150px;
+  min-height: 160px;
 }
 
-.header::after {
+/* Radial depth gradient */
+.dark::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 28% 50%, rgba(227,6,19,0.10) 0%, transparent 65%);
+  background: radial-gradient(
+    ellipse at 30% 60%,
+    rgba(237, 7, 18, 0.07) 0%,
+    transparent 65%
+  );
   pointer-events: none;
   z-index: 0;
 }
 
-.swoosh {
+/* ── Decorative cream lines SVG ── */
+.lines {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
   pointer-events: none;
+  z-index: 1;
 }
 
-.textSide {
-  flex: 1 1 54%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 36px 32px 56px 44px;
+/* ── Text block ── */
+.text {
+  padding: 28px 40px 76px 40px;
   position: relative;
   z-index: 2;
+  /* paddingLeft / paddingRight adjusted inline when photo exists */
 }
 
 .title {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: clamp(2.2rem, 5.5vw, 3.4rem);
-  color: var(--cream);
-  letter-spacing: 0.06em;
-  line-height: 1;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  color: var(--menu-cream);
   text-transform: uppercase;
-}
-
-.titleLine {
-  display: block;
-  width: 48px;
-  height: 3px;
-  background: var(--accent);
-  margin-top: 10px;
-  border-radius: 2px;
+  line-height: 0.93;
+  letter-spacing: -0.01em;
+  margin: 0;
 }
 
 .subtitle {
   font-family: 'Allura', cursive;
-  font-size: 1.55rem;
-  color: rgba(245, 230, 211, 0.6);
-  margin-top: 10px;
-  letter-spacing: 0.02em;
+  font-size: clamp(1.3rem, 2.4vw, 1.75rem);
+  color: var(--menu-red);
+  margin-top: 8px;
   line-height: 1;
 }
 
-.photoSide {
-  flex: 0 0 44%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px 28px 18px 8px;
-  position: relative;
-  z-index: 2;
-}
-
-.blobImg {
-  width: 100%;
-  max-width: 260px;
-  height: 178px;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  border-radius: 62% 38% 55% 45% / 52% 48% 58% 42%;
-  box-shadow:
-    0 10px 36px rgba(0, 0, 0, 0.55),
-    0 0 0 3px rgba(245, 230, 211, 0.12);
-}
-
-.waveBottom {
+/* ── Wave SVG at base of dark area ── */
+.wave {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 68px;
-  z-index: 10;
+  height: 72px;
+  z-index: 3;
   pointer-events: none;
   display: block;
 }
 
-.wavePath {
-  fill: var(--carta-section-bg);
+/* ── Circular photo ── */
+.photo {
+  position: absolute;
+  top: 12px;
+  width: clamp(150px, 20vw, 210px);
+  height: clamp(150px, 20vw, 210px);
+  border-radius: 50%;
+  border: 4px solid var(--menu-cream);
+  overflow: hidden;
+  z-index: 10;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.38);
+  flex-shrink: 0;
 }
 
-@media (max-width: 700px) {
-  .textSide {
-    padding: 28px 20px 56px 28px;
+.photoRight {
+  right: 20px;
+}
+
+.photoLeft {
+  left: 20px;
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .dark {
+    min-height: 185px;
   }
-  .photoSide {
-    flex: 0 0 42%;
-    padding: 14px 16px 14px 4px;
+  .text {
+    padding: 22px 28px 68px 28px;
   }
-  .blobImg {
-    height: 150px;
-    max-width: none;
+  .photo {
+    top: 10px;
+  }
+  .photoRight {
+    right: 12px;
+  }
+  .photoLeft {
+    left: 12px;
   }
 }
 
-@media (max-width: 500px) {
-  .header {
-    flex-direction: column;
-    min-height: auto;
+@media (max-width: 520px) {
+  .dark {
+    min-height: 170px;
   }
-  .textSide {
-    padding: 24px 22px 16px;
-    width: 100%;
+  .text {
+    padding: 18px 18px 64px 18px !important;
   }
-  .photoSide {
-    flex: none;
-    width: 100%;
-    padding: 0 24px 28px;
+  .photo {
+    width: 110px !important;
+    height: 110px !important;
+    top: 8px;
+    border-width: 3px;
   }
-  .blobImg {
-    width: 100%;
-    height: 200px;
-    max-width: 100%;
-    border-radius: 42% 58% 45% 55% / 48% 48% 52% 52%;
+  .photoRight {
+    right: 10px;
   }
-  .title {
-    font-size: 2rem;
+  .photoLeft {
+    left: 10px;
   }
 }

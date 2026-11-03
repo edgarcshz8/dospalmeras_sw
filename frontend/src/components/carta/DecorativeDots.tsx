@@ -2,12 +2,10 @@ import styles from './DecorativeDots.module.css';
 
 export default function DecorativeDots() {
   return (
-    <div className={styles.dots} aria-hidden="true">
-      <span className={styles.dot} />
-      <span className={styles.dot} />
-      <span className={styles.dot} />
-      <span className={styles.dot} />
-      <span className={styles.dot} />
+    <div className={styles.row} aria-hidden="true">
+      <span className={styles.dotLg} />
+      <span className={styles.dotMd} />
+      <span className={styles.dotSm} />
     </div>
   );
 }

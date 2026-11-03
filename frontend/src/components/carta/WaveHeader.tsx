@@ -2,35 +2,86 @@ import styles from './WaveHeader.module.css';
 
 interface Props {
   title: string;
-  subtitle?: string;
+  subtitle: string;
   imageUrl?: string | null;
+  photoSide?: 'left' | 'right';
   plain?: boolean;
 }
 
-export default function WaveHeader({ title, subtitle, imageUrl, plain }: Props) {
-  return (
-    <div className={`${styles.header}${plain ? ` ${styles.plain}` : ''}`}>
-      <svg className={styles.swoosh} viewBox="0 0 600 200" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M-50,120 C100,40 300,160 450,80 C550,30 600,100 650,60" stroke="rgba(245,230,211,0.07)" strokeWidth="1.5" fill="none"/>
-        <path d="M-50,160 C150,90 350,180 500,110 C580,70 620,140 660,95" stroke="rgba(245,230,211,0.04)" strokeWidth="1" fill="none"/>
-        <path d="M-20,80 C80,40 200,100 320,60 C420,30 500,70 560,45" stroke="rgba(227,6,19,0.06)" strokeWidth="1" fill="none"/>
-      </svg>
+export default function WaveHeader({
+  title,
+  subtitle,
+  imageUrl,
+  photoSide = 'right',
+  plain = false,
+}: Props) {
+  const hasPhoto = !!imageUrl;
+  const onLeft = hasPhoto && photoSide === 'left';
 
-      <div className={styles.textSide}>
-        <h2 className={styles.title}>{title}</h2>
-        <span className={styles.titleLine} aria-hidden="true" />
-        {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
+  return (
+    <div className={`${styles.wrapper} ${onLeft ? styles.onLeft : ''}`}>
+      {/* Dark header area */}
+      <div className={`${styles.dark} ${plain ? styles.plain : ''}`}>
+        {/* Decorative cream swoosh lines */}
+        <svg
+          className={styles.lines}
+          viewBox="0 0 1200 220"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M-80,170 C180,90 500,175 820,112 C1020,72 1120,138 1280,96"
+            fill="none"
+            stroke="#F6E8D8"
+            strokeWidth="2"
+            opacity="0.22"
+          />
+          <path
+            d="M-80,192 C240,145 560,192 880,155 C1060,132 1165,162 1280,136"
+            fill="none"
+            stroke="#F6E8D8"
+            strokeWidth="1.2"
+            opacity="0.14"
+          />
+        </svg>
+
+        {/* Text */}
+        <div
+          className={styles.text}
+          style={
+            hasPhoto
+              ? photoSide === 'right'
+                ? { paddingRight: 'clamp(200px, 22vw, 260px)' }
+                : { paddingLeft: 'clamp(200px, 22vw, 260px)' }
+              : undefined
+          }
+        >
+          <h2 className={styles.title}>{title.toUpperCase()}</h2>
+          <p className={styles.subtitle}>{subtitle}</p>
+        </div>
+
+        {/* Wave bottom — white fill creates organic edge */}
+        <svg
+          className={styles.wave}
+          viewBox="0 0 1200 72"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0,72 L0,40 C160,10 320,58 500,30 C680,2 840,52 1010,24 C1080,10 1150,42 1200,20 L1200,72 Z"
+            fill="#FFFFFF"
+          />
+        </svg>
       </div>
 
-      {imageUrl && (
-        <div className={styles.photoSide}>
-          <img src={imageUrl} alt="" className={styles.blobImg} aria-hidden="true" />
+      {/* Circular photo — positioned on wrapper, overlaps dark area boundary */}
+      {hasPhoto && (
+        <div
+          className={`${styles.photo} ${photoSide === 'left' ? styles.photoLeft : styles.photoRight}`}
+        >
+          <img src={imageUrl!} alt="" />
         </div>
       )}
-
-      <svg className={styles.waveBottom} viewBox="0 0 1200 68" preserveAspectRatio="none" aria-hidden="true">
-        <path className={styles.wavePath} d="M0,68 L0,46 C180,14 340,64 520,36 C700,8 860,58 1040,28 C1110,18 1160,36 1200,22 L1200,68 Z" />
-      </svg>
     </div>
   );
 }

@@ -23,6 +23,13 @@ body {
   --carta-bg: #ffffff;
   --carta-section-bg: #faf7f2;
 
+  /* ── Menú gastronomico ── */
+  --menu-dark: #211B1A;
+  --menu-red: #ED0712;
+  --menu-cream: #F6E8D8;
+  --menu-gray: #514B49;
+  --menu-white: #FFFFFF;
+
   /* ── Legacy gold (Admin + other pages) ── */
   --gold: #c9a84c;
   --gold-light: #e8c97a;
