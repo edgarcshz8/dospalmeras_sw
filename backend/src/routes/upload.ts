@@ -11,7 +11,7 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
-    if (/\.(jpeg|jpg|png|gif|webp)$/i.test(file.originalname)) {
+    if (/\.(jpeg|jpg|jfif|png|gif|webp)$/i.test(file.originalname)) {
       cb(null, true);
     } else {
       cb(new Error('Solo se permiten imágenes'));

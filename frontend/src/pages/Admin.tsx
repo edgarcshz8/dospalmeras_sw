@@ -36,8 +36,8 @@ function DailyMenuCard({ menu, onUpdated, onDeleted }: DailyMenuCardProps) {
   }, [menu.id]);
 
   const uploadImage = async (file: File) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    const allowedExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jfif'];
+    const allowedExts = ['.jpg', '.jpeg', '.jfif', '.png', '.gif', '.webp'];
     const ext = '.' + file.name.split('.').pop()?.toLowerCase();
     if (!allowedTypes.includes(file.type) && !allowedExts.includes(ext)) {
       alert('Solo se permiten imágenes JPG, PNG, GIF o WEBP.');
@@ -172,7 +172,7 @@ function DailyMenuCard({ menu, onUpdated, onDeleted }: DailyMenuCardProps) {
         <input
           ref={fileRef}
           type="file"
-          accept=".jpg,.jpeg,.png,.gif,.webp"
+          accept=".jpg,.jpeg,.jfif,.png,.gif,.webp"
           style={{ display: 'none' }}
           onChange={e => { if (e.target.files?.[0]) uploadImage(e.target.files[0]); }}
         />
@@ -434,8 +434,8 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
   };
 
   const uploadImage = async (file: File) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    const allowedExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jfif'];
+    const allowedExts = ['.jpg', '.jpeg', '.jfif', '.png', '.gif', '.webp'];
     const ext = '.' + file.name.split('.').pop()?.toLowerCase();
     const validType = allowedTypes.includes(file.type);
     const validExt  = allowedExts.includes(ext);
@@ -493,7 +493,7 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
           <input
             ref={fileRef}
             type="file"
-            accept=".jpg,.jpeg,.png,.gif,.webp"
+            accept=".jpg,.jpeg,.jfif,.png,.gif,.webp"
             style={{ display: 'none' }}
             onChange={e => { if (e.target.files?.[0]) uploadImage(e.target.files[0]); }}
           />
