@@ -1,10 +1,20 @@
 .login-page {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #1a1209 0%, #0f0c08 100%);
   padding: 24px;
+  gap: 24px;
+}
+
+.login-logo-img {
+  height: 90px;
+  width: auto;
+  display: block;
+  filter: invert(1);
+  mix-blend-mode: screen;
 }
 
 .login-card {
@@ -14,17 +24,6 @@
   width: 100%;
   max-width: 400px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-}
-
-.login-logo {
-  text-align: center;
-  margin-bottom: 8px;
-}
-
-.login-logo-text {
-  font-family: 'Dancing Script', cursive;
-  font-size: 2.2rem;
-  color: var(--gold);
 }
 
 .login-title {

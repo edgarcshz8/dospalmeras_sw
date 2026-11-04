@@ -33,10 +33,8 @@ export default function Login() {
 
   return (
     <div className="login-page">
+      <img src="/logo_blanco.webp" alt="La Casona" className="login-logo-img" />
       <div className="login-card">
-        <div className="login-logo">
-          <span className="login-logo-text">Dos Palmeras</span>
-        </div>
         <h1 className="login-title">Acceso al Panel</h1>
         <form onSubmit={handleSubmit} className="login-form">
           <div className="login-field">
