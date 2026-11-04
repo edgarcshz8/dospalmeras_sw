@@ -203,7 +203,7 @@ export default function Carta() {
       {/* ══ COVER ══ */}
       <header className={styles.cover}>
         <div className={styles.coverInner}>
-          <h1 className={styles.coverName}>Dos Palmeras</h1>
+          <img src="/logo_blanco.webp" alt="Logo" className={styles.coverLogo} />
           <p className={styles.coverTagline}>Carta de menú</p>
         </div>
       </header>
@@ -266,7 +266,7 @@ export default function Carta() {
       </main>
 
       <footer className={styles.footer}>
-        <p className={styles.footerBrand}>Dos Palmeras</p>
+        <img src="/logo_blanco.webp" alt="Logo" className={styles.footerLogo} />
         <p className={styles.footerNote}>Todos los precios incluyen IVA</p>
       </footer>
     </div>

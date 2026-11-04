@@ -64,13 +64,14 @@
   z-index: 1;
 }
 
-.coverName {
-  font-family: 'Dancing Script', cursive;
-  font-size: clamp(2.2rem, 10vw, 6.5rem);
-  font-weight: 700;
-  color: var(--menu-cream);
-  line-height: 1;
+.coverLogo {
+  height: clamp(80px, 22vw, 180px);
+  width: auto;
+  object-fit: contain;
   margin-bottom: 16px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .coverTagline {
@@ -294,12 +295,12 @@
   pointer-events: none;
 }
 
-.footerBrand {
-  font-family: 'Dancing Script', cursive;
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--menu-cream);
-  margin-bottom: 10px;
+.footerLogo {
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 10px;
   position: relative;
 }
 
