@@ -47,15 +47,16 @@ router.post('/', requireAuth, async (req, res) => {
 });
 
 router.put('/:id', requireAuth, async (req, res) => {
-  const { name, display_order, is_active } = req.body;
+  const { name, subtitle, display_order, is_active } = req.body;
   try {
     const result = await pool.query(
       `UPDATE menu_sections SET
         name = COALESCE($1, name),
-        display_order = COALESCE($2, display_order),
-        is_active = COALESCE($3, is_active)
-       WHERE id = $4 RETURNING *`,
-      [name, display_order, is_active, req.params.id]
+        subtitle = $2,
+        display_order = COALESCE($3, display_order),
+        is_active = COALESCE($4, is_active)
+       WHERE id = $5 RETURNING *`,
+      [name, subtitle ?? null, display_order, is_active, req.params.id]
     );
     if (!result.rows[0]) return res.status(404).json({ error: 'No encontrado' });
     res.json(result.rows[0]);

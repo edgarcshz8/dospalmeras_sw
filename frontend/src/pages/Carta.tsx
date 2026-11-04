@@ -239,7 +239,7 @@ export default function Carta() {
             <section key={section.id} className={styles.section}>
               <WaveHeader
                 title={section.name}
-                subtitle={getSectionSubtitle(section.name)}
+                subtitle={section.subtitle ?? getSectionSubtitle(section.name)}
                 imageUrl={section.image_url}
                 photoSide={sectionSides.get(section.id)}
               />

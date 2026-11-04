@@ -11,6 +11,7 @@ export interface MenuItem {
 export interface MenuSection {
   id: number;
   name: string;
+  subtitle: string | null;
   display_order: number;
   image_url: string | null;
   is_active: boolean;

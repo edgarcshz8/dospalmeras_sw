@@ -429,6 +429,31 @@
   outline: none;
   min-width: 180px;
 }
+
+.section-edit-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.section-subtitle-input {
+  font-size: 0.78rem;
+  padding: 3px 10px;
+  opacity: 0.85;
+}
+
+.section-name-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.section-subtitle-label {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 400;
+  font-style: italic;
+}
 .section-header-actions {
   display: flex;
   align-items: center;

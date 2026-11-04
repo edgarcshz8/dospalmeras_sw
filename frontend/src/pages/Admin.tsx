@@ -399,6 +399,7 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
   const [loadedItems, setLoadedItems] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState(section.name);
+  const [newSubtitle, setNewSubtitle] = useState(section.subtitle ?? '');
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -419,7 +420,10 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
   const saveName = async () => {
     if (!newName.trim()) return;
     try {
-      const res = await api.put<MenuSection>(`/api/sections/${section.id}`, { name: newName.trim() });
+      const res = await api.put<MenuSection>(`/api/sections/${section.id}`, {
+        name: newName.trim(),
+        subtitle: newSubtitle.trim() || null,
+      });
       onUpdated(res.data);
       setEditingName(false);
     } catch {}
@@ -466,16 +470,28 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
         <button className="section-toggle" onClick={toggle}>
           <span className="section-toggle-arrow">{open ? '▼' : '▶'}</span>
           {editingName ? (
-            <input
-              className="section-name-input"
-              value={newName}
-              onChange={e => setNewName(e.target.value)}
-              onClick={e => e.stopPropagation()}
-              onKeyDown={e => { if (e.key === 'Enter') saveName(); if (e.key === 'Escape') setEditingName(false); }}
-              autoFocus
-            />
+            <div className="section-edit-fields" onClick={e => e.stopPropagation()}>
+              <input
+                className="section-name-input"
+                value={newName}
+                onChange={e => setNewName(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') saveName(); if (e.key === 'Escape') setEditingName(false); }}
+                placeholder="Nombre de sección *"
+                autoFocus
+              />
+              <input
+                className="section-name-input section-subtitle-input"
+                value={newSubtitle}
+                onChange={e => setNewSubtitle(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') saveName(); if (e.key === 'Escape') setEditingName(false); }}
+                placeholder="Subtítulo (opcional)"
+              />
+            </div>
           ) : (
-            <span className="section-name">{section.name}</span>
+            <div className="section-name-group">
+              <span className="section-name">{section.name}</span>
+              {section.subtitle && <span className="section-subtitle-label">{section.subtitle}</span>}
+            </div>
           )}
         </button>
         <div className="section-header-actions">
@@ -500,10 +516,10 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
           {editingName ? (
             <>
               <button className="btn-save-sm" onClick={saveName}>✓</button>
-              <button className="btn-cancel-sm" onClick={() => { setEditingName(false); setNewName(section.name); }}>✕</button>
+              <button className="btn-cancel-sm" onClick={() => { setEditingName(false); setNewName(section.name); setNewSubtitle(section.subtitle ?? ''); }}>✕</button>
             </>
           ) : (
-            <button className="btn-icon" onClick={() => setEditingName(true)} title="Renombrar">✏️</button>
+            <button className="btn-icon" onClick={() => setEditingName(true)} title="Editar">✏️</button>
           )}
           <button className="btn-icon btn-icon--del" onClick={delSection} title="Eliminar sección">🗑️</button>
         </div>

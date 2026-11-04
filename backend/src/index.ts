@@ -54,6 +54,10 @@ async function runMigrations() {
     await pool.query(
       `ALTER TABLE daily_menus ADD COLUMN IF NOT EXISTS image_url VARCHAR(500) DEFAULT NULL`
     );
+    // Agregar columna subtitle a secciones si no existe
+    await pool.query(
+      `ALTER TABLE menu_sections ADD COLUMN IF NOT EXISTS subtitle VARCHAR(200) DEFAULT NULL`
+    );
   } catch (err) {
     console.error('Error en migración:', err);
   }
