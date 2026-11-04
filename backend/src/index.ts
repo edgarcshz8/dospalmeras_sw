@@ -23,15 +23,30 @@ app.use('/api/items', itemsRouter);
 app.use('/api/daily-menu', dailyMenuRouter);
 app.use('/api/upload', uploadRouter);
 
-// Migración idempotente: elimina date y restricciones únicas en slot_number
+// Migración idempotente: libera daily_menus de restricciones del diseño original
 async function runMigrations() {
   try {
+    // Eliminar constraints únicos conocidos
     await pool.query(
       `ALTER TABLE daily_menus DROP CONSTRAINT IF EXISTS daily_menus_slot_number_date_key`
     );
     await pool.query(
       `ALTER TABLE daily_menus DROP CONSTRAINT IF EXISTS daily_menus_slot_number_key`
     );
+    // Eliminar cualquier CHECK constraint que limite slot_number (ej: BETWEEN 1 AND 5)
+    await pool.query(`
+      DO $$
+      DECLARE c record;
+      BEGIN
+        FOR c IN
+          SELECT conname FROM pg_constraint
+          WHERE conrelid = 'daily_menus'::regclass AND contype = 'c'
+        LOOP
+          EXECUTE 'ALTER TABLE daily_menus DROP CONSTRAINT IF EXISTS ' || quote_ident(c.conname);
+        END LOOP;
+      END $$;
+    `);
+    // Eliminar columna date si aún existe
     await pool.query(
       `ALTER TABLE daily_menus DROP COLUMN IF EXISTS date`
     );
