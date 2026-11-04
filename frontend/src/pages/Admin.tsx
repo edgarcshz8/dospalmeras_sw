@@ -10,98 +10,93 @@ function formatPrice(p: number | null) {
   return '$' + p.toLocaleString('es-CL');
 }
 
-function todayISO() {
-  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Santiago' });
-}
+// ── Daily Menu Card ───────────────────────────────────────────────────────────
 
-// ── Daily Menu Slot ──────────────────────────────────────────────────────────
-
-interface SlotProps {
-  slotNum: number;
-  date: string;
-  existing: DailyMenu | undefined;
-  onSaved: (dm: DailyMenu) => void;
+interface DailyMenuCardProps {
+  menu: DailyMenu;
+  onUpdated: (m: DailyMenu) => void;
   onDeleted: (id: number) => void;
 }
 
-function DailySlot({ slotNum, date, existing, onSaved, onDeleted }: SlotProps) {
+function DailyMenuCard({ menu, onUpdated, onDeleted }: DailyMenuCardProps) {
   const [editing, setEditing] = useState(false);
-  const [title, setTitle] = useState(existing?.title ?? '');
-  const [desc, setDesc] = useState(existing?.description ?? '');
-  const [price, setPrice] = useState(existing?.price?.toString() ?? '');
+  const [title, setTitle] = useState(menu.title ?? '');
+  const [desc, setDesc] = useState(menu.description ?? '');
+  const [price, setPrice] = useState(menu.price?.toString() ?? '');
+  const [toggling, setToggling] = useState(false);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    setTitle(existing?.title ?? '');
-    setDesc(existing?.description ?? '');
-    setPrice(existing?.price?.toString() ?? '');
+    setTitle(menu.title ?? '');
+    setDesc(menu.description ?? '');
+    setPrice(menu.price?.toString() ?? '');
     setEditing(false);
-  }, [existing, date]);
+  }, [menu.id]);
+
+  const toggle = async () => {
+    setToggling(true);
+    try {
+      const res = await api.patch<DailyMenu>(`/api/daily-menu/${menu.id}`, {
+        is_active: !menu.is_active,
+      });
+      onUpdated(res.data);
+    } catch {
+      // 401 handled by interceptor
+    } finally {
+      setToggling(false);
+    }
+  };
 
   const save = async () => {
     if (!title.trim()) return;
     setSaving(true);
     try {
-      const res = await api.post<DailyMenu>('/api/daily-menu', {
-        slot_number: slotNum,
-        date,
+      const res = await api.put<DailyMenu>(`/api/daily-menu/${menu.id}`, {
         title: title.trim(),
         description: desc.trim() || null,
         price: price ? parseInt(price.replace(/\D/g, '')) : null,
       });
-      onSaved(res.data);
+      onUpdated(res.data);
       setEditing(false);
     } catch {
-      // 401 handled by response interceptor
+      // 401 handled by interceptor
     } finally {
       setSaving(false);
     }
   };
 
   const del = async () => {
-    if (!existing || !confirm('¿Eliminar este menú?')) return;
+    if (!confirm(`¿Eliminar "${menu.title}"?`)) return;
     try {
-      await api.delete(`/api/daily-menu/${existing.id}`);
-      onDeleted(existing.id);
-      setTitle(''); setDesc(''); setPrice('');
+      await api.delete(`/api/daily-menu/${menu.id}`);
+      onDeleted(menu.id);
     } catch {}
   };
 
-  if (!editing && !existing) {
+  if (editing) {
     return (
-      <button className="slot-add" onClick={() => setEditing(true)}>
-        <span className="slot-add-num">Menú {slotNum}</span>
-        <span className="slot-add-icon">+</span>
-        <span className="slot-add-label">Agregar</span>
-      </button>
-    );
-  }
-
-  if (editing || !existing) {
-    return (
-      <div className="slot-form">
-        <div className="slot-form-header">Menú {slotNum}</div>
+      <div className="dm-card dm-card--editing">
         <input
-          className="slot-input"
+          className="dm-input"
           placeholder="Nombre del menú *"
           value={title}
           onChange={e => setTitle(e.target.value)}
           autoFocus
         />
         <textarea
-          className="slot-textarea"
+          className="dm-textarea"
           placeholder="Descripción (opcional)"
           value={desc}
           onChange={e => setDesc(e.target.value)}
           rows={2}
         />
         <input
-          className="slot-input"
+          className="dm-input dm-input--price"
           placeholder="Precio (ej: 4500)"
           value={price}
           onChange={e => setPrice(e.target.value)}
         />
-        <div className="slot-form-actions">
+        <div className="dm-form-actions">
           <button className="btn-save" onClick={save} disabled={saving || !title.trim()}>
             {saving ? 'Guardando…' : 'Guardar'}
           </button>
@@ -112,18 +107,92 @@ function DailySlot({ slotNum, date, existing, onSaved, onDeleted }: SlotProps) {
   }
 
   return (
-    <div className="slot-card">
-      <div className="slot-card-num">Menú {slotNum}</div>
-      <div className="slot-card-title">{existing.title}</div>
-      {existing.description && (
-        <div className="slot-card-desc">{existing.description}</div>
-      )}
-      {existing.price != null && (
-        <div className="slot-card-price">{formatPrice(existing.price)}</div>
-      )}
-      <div className="slot-card-actions">
-        <button className="btn-edit-sm" onClick={() => setEditing(true)}>Editar</button>
-        <button className="btn-del-sm" onClick={del}>Eliminar</button>
+    <div className={`dm-card ${menu.is_active ? 'dm-card--on' : 'dm-card--off'}`}>
+      <button
+        className="dm-toggle"
+        onClick={toggle}
+        disabled={toggling}
+        title={menu.is_active ? 'Desactivar' : 'Activar'}
+      >
+        <span className={`dm-toggle-track ${menu.is_active ? 'dm-toggle-track--on' : ''}`}>
+          <span className="dm-toggle-thumb" />
+        </span>
+        <span className="dm-toggle-label">
+          {menu.is_active ? 'Activo' : 'Inactivo'}
+        </span>
+      </button>
+
+      <div className="dm-card-info">
+        <span className="dm-card-title">{menu.title ?? `Menú ${menu.slot_number}`}</span>
+        {menu.description && <span className="dm-card-desc">{menu.description}</span>}
+        {menu.price != null && <span className="dm-card-price">{formatPrice(menu.price)}</span>}
+      </div>
+
+      <div className="dm-card-actions">
+        <button className="btn-icon" onClick={() => setEditing(true)} title="Editar">✏️</button>
+        <button className="btn-icon btn-icon--del" onClick={del} title="Eliminar">🗑️</button>
+      </div>
+    </div>
+  );
+}
+
+// ── Add Daily Menu Form ───────────────────────────────────────────────────────
+
+interface AddDailyMenuFormProps {
+  onAdded: (m: DailyMenu) => void;
+  onClose: () => void;
+}
+
+function AddDailyMenuForm({ onAdded, onClose }: AddDailyMenuFormProps) {
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
+  const [price, setPrice] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const save = async () => {
+    if (!title.trim()) return;
+    setSaving(true);
+    try {
+      const res = await api.post<DailyMenu>('/api/daily-menu', {
+        title: title.trim(),
+        description: desc.trim() || null,
+        price: price ? parseInt(price.replace(/\D/g, '')) : null,
+      });
+      onAdded(res.data);
+    } catch {
+      // 401 handled by interceptor
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="dm-add-form">
+      <input
+        className="dm-input"
+        placeholder="Nombre del menú *"
+        value={title}
+        onChange={e => setTitle(e.target.value)}
+        autoFocus
+      />
+      <textarea
+        className="dm-textarea"
+        placeholder="Descripción (opcional)"
+        value={desc}
+        onChange={e => setDesc(e.target.value)}
+        rows={2}
+      />
+      <input
+        className="dm-input dm-input--price"
+        placeholder="Precio (ej: 4500)"
+        value={price}
+        onChange={e => setPrice(e.target.value)}
+      />
+      <div className="dm-form-actions">
+        <button className="btn-save" onClick={save} disabled={saving || !title.trim()}>
+          {saving ? 'Guardando…' : 'Crear Menú'}
+        </button>
+        <button className="btn-cancel" onClick={onClose}>Cancelar</button>
       </div>
     </div>
   );
@@ -415,19 +484,16 @@ function SectionAccordion({ section, onUpdated, onDeleted }: SectionAccordionPro
 export default function Admin() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [date, setDate] = useState(todayISO());
   const [dailyMenus, setDailyMenus] = useState<DailyMenu[]>([]);
+  const [addingMenu, setAddingMenu] = useState(false);
   const [sections, setSections] = useState<MenuSection[]>([]);
   const [newSectionName, setNewSectionName] = useState('');
   const [addingSection, setAddingSection] = useState(false);
 
   useEffect(() => {
     api.get<MenuSection[]>('/api/sections').then(r => setSections(r.data)).catch(() => {});
+    api.get<DailyMenu[]>('/api/daily-menu').then(r => setDailyMenus(r.data)).catch(() => {});
   }, []);
-
-  useEffect(() => {
-    api.get<DailyMenu[]>(`/api/daily-menu?date=${date}`).then(r => setDailyMenus(r.data)).catch(() => {});
-  }, [date]);
 
   const doLogout = () => { logout(); navigate('/login'); };
 
@@ -443,18 +509,6 @@ export default function Admin() {
       setNewSectionName('');
       setAddingSection(false);
     } catch {}
-  };
-
-  const handleDailyMenuSaved = (dm: DailyMenu) => {
-    setDailyMenus(prev => {
-      const exists = prev.find(d => d.id === dm.id);
-      if (exists) return prev.map(d => d.id === dm.id ? dm : d);
-      return [...prev, dm];
-    });
-  };
-
-  const handleDailyMenuDeleted = (id: number) => {
-    setDailyMenus(prev => prev.filter(d => d.id !== id));
   };
 
   return (
@@ -474,37 +528,43 @@ export default function Admin() {
       </header>
 
       <div className="admin-body">
-        {/* Daily Menu */}
+
+        {/* Menú del Día */}
         <section className="admin-section">
           <div className="admin-section-header">
             <h2 className="admin-section-title">🗓 Menú del Día</h2>
-            <div className="daily-date-picker">
-              <label htmlFor="menu-date">Fecha:</label>
-              <input
-                id="menu-date"
-                type="date"
-                value={date}
-                onChange={e => setDate(e.target.value)}
-              />
-              <button className="btn-today" onClick={() => setDate(todayISO())}>Hoy</button>
-            </div>
+            <button className="btn-add-section" onClick={() => setAddingMenu(p => !p)}>
+              {addingMenu ? 'Cancelar' : '+ Nuevo Menú'}
+            </button>
           </div>
-          <p className="admin-hint">Agrega hasta 5 menús del día. Solo los que completes aparecen en la carta.</p>
-          <div className="daily-slots">
-            {[1, 2, 3, 4, 5].map(n => (
-              <DailySlot
-                key={n}
-                slotNum={n}
-                date={date}
-                existing={dailyMenus.find(d => d.slot_number === n)}
-                onSaved={handleDailyMenuSaved}
-                onDeleted={handleDailyMenuDeleted}
+          <p className="admin-hint">
+            Activa o desactiva cada menú para controlar qué aparece hoy en la carta.
+            Los menús creados aquí son permanentes y puedes reutilizarlos cualquier día.
+          </p>
+
+          {addingMenu && (
+            <AddDailyMenuForm
+              onAdded={dm => { setDailyMenus(prev => [...prev, dm]); setAddingMenu(false); }}
+              onClose={() => setAddingMenu(false)}
+            />
+          )}
+
+          <div className="dm-list">
+            {dailyMenus.length === 0 && !addingMenu && (
+              <p className="dm-empty">No hay menús creados aún. Agrega el primero con el botón de arriba.</p>
+            )}
+            {dailyMenus.map(dm => (
+              <DailyMenuCard
+                key={dm.id}
+                menu={dm}
+                onUpdated={updated => setDailyMenus(prev => prev.map(d => d.id === updated.id ? updated : d))}
+                onDeleted={id => setDailyMenus(prev => prev.filter(d => d.id !== id))}
               />
             ))}
           </div>
         </section>
 
-        {/* Sections */}
+        {/* Secciones */}
         <section className="admin-section">
           <div className="admin-section-header">
             <h2 className="admin-section-title">📋 Secciones del Menú</h2>
@@ -540,6 +600,7 @@ export default function Admin() {
             ))}
           </div>
         </section>
+
       </div>
     </div>
   );

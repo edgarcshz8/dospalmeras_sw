@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
+import pool from './db';
 import authRouter from './routes/auth';
 import sectionsRouter from './routes/sections';
 import itemsRouter from './routes/items';
@@ -22,6 +23,22 @@ app.use('/api/items', itemsRouter);
 app.use('/api/daily-menu', dailyMenuRouter);
 app.use('/api/upload', uploadRouter);
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
+// Migración idempotente: elimina date de daily_menus si existe
+async function runMigrations() {
+  try {
+    await pool.query(
+      `ALTER TABLE daily_menus DROP CONSTRAINT IF EXISTS daily_menus_slot_number_date_key`
+    );
+    await pool.query(
+      `ALTER TABLE daily_menus DROP COLUMN IF EXISTS date`
+    );
+  } catch (err) {
+    console.error('Error en migración:', err);
+  }
+}
+
+runMigrations().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en puerto ${PORT}`);
+  });
 });

@@ -4,12 +4,11 @@ import { requireAuth } from '../middleware/auth';
 
 const router = Router();
 
+// Público: menús activos para mostrar en la carta
 router.get('/today', async (_req, res) => {
   try {
     const result = await pool.query(
-      `SELECT * FROM daily_menus
-       WHERE date = CURRENT_DATE AND is_active = true
-       ORDER BY slot_number`
+      `SELECT * FROM daily_menus WHERE is_active = true ORDER BY slot_number, id`
     );
     res.json(result.rows);
   } catch (err) {
@@ -17,12 +16,11 @@ router.get('/today', async (_req, res) => {
   }
 });
 
-router.get('/', requireAuth, async (req, res) => {
-  const date = req.query.date || new Date().toISOString().split('T')[0];
+// Admin: lista todos los menús permanentes
+router.get('/', requireAuth, async (_req, res) => {
   try {
     const result = await pool.query(
-      'SELECT * FROM daily_menus WHERE date = $1 ORDER BY slot_number',
-      [date]
+      `SELECT * FROM daily_menus ORDER BY slot_number, id`
     );
     res.json(result.rows);
   } catch (err) {
@@ -30,20 +28,21 @@ router.get('/', requireAuth, async (req, res) => {
   }
 });
 
+// Admin: crea un menú permanente nuevo
 router.post('/', requireAuth, async (req, res) => {
-  const { slot_number, date, title, description, price } = req.body;
-  if (!slot_number || slot_number < 1 || slot_number > 5) {
-    return res.status(400).json({ error: 'slot_number debe estar entre 1 y 5' });
+  const { title, description, price } = req.body;
+  if (!title?.trim()) {
+    return res.status(400).json({ error: 'El nombre del menú es obligatorio' });
   }
-  const menuDate = date || new Date().toISOString().split('T')[0];
   try {
     const result = await pool.query(
-      `INSERT INTO daily_menus (slot_number, date, title, description, price, is_active, updated_at)
-       VALUES ($1, $2, $3, $4, $5, true, NOW())
-       ON CONFLICT (slot_number, date)
-       DO UPDATE SET title = $3, description = $4, price = $5, is_active = true, updated_at = NOW()
+      `INSERT INTO daily_menus (slot_number, title, description, price, is_active, updated_at)
+       VALUES (
+         (SELECT COALESCE(MAX(slot_number), 0) + 1 FROM daily_menus),
+         $1, $2, $3, false, NOW()
+       )
        RETURNING *`,
-      [slot_number, menuDate, title, description || null, price ?? null]
+      [title.trim(), description || null, price ?? null]
     );
     res.json(result.rows[0]);
   } catch (err) {
@@ -51,18 +50,16 @@ router.post('/', requireAuth, async (req, res) => {
   }
 });
 
-router.put('/:id', requireAuth, async (req, res) => {
-  const { title, description, price, is_active } = req.body;
+// Admin: activa o desactiva un menú
+router.patch('/:id', requireAuth, async (req, res) => {
+  const { is_active } = req.body;
+  if (typeof is_active !== 'boolean') {
+    return res.status(400).json({ error: 'is_active debe ser boolean' });
+  }
   try {
     const result = await pool.query(
-      `UPDATE daily_menus SET
-        title = COALESCE($1, title),
-        description = COALESCE($2, description),
-        price = $3,
-        is_active = COALESCE($4, is_active),
-        updated_at = NOW()
-       WHERE id = $5 RETURNING *`,
-      [title, description, price ?? null, is_active, req.params.id]
+      `UPDATE daily_menus SET is_active = $1, updated_at = NOW() WHERE id = $2 RETURNING *`,
+      [is_active, req.params.id]
     );
     if (!result.rows[0]) return res.status(404).json({ error: 'No encontrado' });
     res.json(result.rows[0]);
@@ -71,6 +68,30 @@ router.put('/:id', requireAuth, async (req, res) => {
   }
 });
 
+// Admin: edita título, descripción y precio
+router.put('/:id', requireAuth, async (req, res) => {
+  const { title, description, price } = req.body;
+  if (!title?.trim()) {
+    return res.status(400).json({ error: 'El nombre del menú es obligatorio' });
+  }
+  try {
+    const result = await pool.query(
+      `UPDATE daily_menus SET
+        title = $1,
+        description = $2,
+        price = $3,
+        updated_at = NOW()
+       WHERE id = $4 RETURNING *`,
+      [title.trim(), description || null, price ?? null, req.params.id]
+    );
+    if (!result.rows[0]) return res.status(404).json({ error: 'No encontrado' });
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+// Admin: elimina permanentemente
 router.delete('/:id', requireAuth, async (req, res) => {
   try {
     await pool.query('DELETE FROM daily_menus WHERE id = $1', [req.params.id]);

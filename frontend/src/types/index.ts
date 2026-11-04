@@ -20,7 +20,6 @@ export interface MenuSection {
 export interface DailyMenu {
   id: number;
   slot_number: number;
-  date: string;
   title: string | null;
   description: string | null;
   price: number | null;
