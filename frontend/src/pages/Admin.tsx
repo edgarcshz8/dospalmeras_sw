@@ -761,12 +761,29 @@ export default function Admin() {
       '@media print{*{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}@page{size:A4;margin:8mm}.wave-wrapper{page-break-inside:avoid}}',
     ].join('\n');
 
+    const printScript = '<script>'
+      + 'document.fonts.ready.then(function(){'
+      + '  window.focus();'
+      + '  window.print();'
+      + '});'
+      + '<\/script>';
+
+    const printBtnCss = '.print-btn{'
+      + 'position:fixed;top:14px;right:16px;z-index:9999;'
+      + 'background:#ED0712;color:#fff;border:none;cursor:pointer;'
+      + 'font-family:\'Montserrat\',sans-serif;font-weight:700;font-size:.8rem;'
+      + 'padding:9px 20px;border-radius:6px;letter-spacing:.04em;'
+      + 'box-shadow:0 2px 8px rgba(0,0,0,.25);}'
+      + '.print-btn:hover{background:#c40010}'
+      + '@media print{.print-btn{display:none}}';
+
     const html = '<!DOCTYPE html>\n<html lang="es">\n<head>\n'
       + '<meta charset="UTF-8"/>\n'
       + '<title>Carta del Restaurante</title>\n'
       + '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Poppins:wght@300;400&family=Allura&display=swap" rel="stylesheet"/>\n'
-      + '<style>\n' + css + '\n</style>\n'
+      + '<style>\n' + css + '\n' + printBtnCss + '\n</style>\n'
       + '</head>\n<body>\n'
+      + '<button class="print-btn" onclick="window.print()">🖨 Guardar PDF</button>\n'
       + '<div class="cover"><div class="cover-inner">'
       + '<img src="' + origin + '/logo_blanco.webp" alt="Logo" class="cover-logo"/>'
       + '<p class="cover-tagline">Carta de menú</p>'
@@ -777,6 +794,7 @@ export default function Admin() {
       + '<img src="' + origin + '/logo_blanco.webp" alt="Logo" class="footer-logo"/>'
       + '<p class="footer-note">Todos los precios incluyen IVA</p>'
       + '</div>\n'
+      + printScript + '\n'
       + '</body>\n</html>';
 
     const win = window.open('', '_blank');
@@ -786,8 +804,6 @@ export default function Admin() {
     }
     win.document.write(html);
     win.document.close();
-    win.focus();
-    setTimeout(() => win.print(), 1200);
   };
 
   const addSection = async () => {
