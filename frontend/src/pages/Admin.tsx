@@ -825,7 +825,7 @@ export default function Admin() {
       {/* Header */}
       <header className="admin-header">
         <div className="admin-header-left">
-          <span className="admin-logo">Dos Palmeras</span>
+          <img src="/logo_blanco.webp" alt="La Casona" className="admin-logo-img" />
           <span className="admin-header-sep">|</span>
           <span className="admin-header-title">Panel de Administración</span>
         </div>
