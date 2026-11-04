@@ -90,47 +90,38 @@ function SectionProducts({ items }: { items: MenuItem[] }) {
   );
 }
 
+function DailyMenuItem({ dm, revealIndex }: { dm: DailyMenu; revealIndex: number }) {
+  return (
+    <div
+      className={styles.dmProduct}
+      data-reveal=""
+      style={{ transitionDelay: `${revealIndex * 60}ms` }}
+    >
+      {dm.image_url && (
+        <img src={dm.image_url} alt="" className={styles.dmThumb} />
+      )}
+      <div className={styles.productInfo}>
+        <p className={styles.productName}>
+          {dm.title ?? `Menú ${dm.slot_number}`}
+        </p>
+        {dm.description && <p className={styles.productDesc}>{dm.description}</p>}
+      </div>
+      {dm.price != null && <PriceBubble formatted={formatPrice(dm.price)} />}
+    </div>
+  );
+}
+
 function DailyMenuProducts({ items }: { items: DailyMenu[] }) {
   const [left, right] = splitItems(items);
   const hasTwoColumns = right.length > 0;
   return (
     <div className={styles.columnsWrapper}>
       <div className={hasTwoColumns ? `${styles.column} ${styles.columnLeft}` : styles.column}>
-        {left.map((dm, i) => (
-          <div
-            key={dm.id}
-            className={styles.product}
-            data-reveal=""
-            style={{ transitionDelay: `${i * 60}ms` }}
-          >
-            <div className={styles.productInfo}>
-              <p className={styles.productName}>
-                Menú {dm.slot_number}{dm.title ? ` — ${dm.title}` : ''}
-              </p>
-              {dm.description && <p className={styles.productDesc}>{dm.description}</p>}
-            </div>
-            {dm.price != null && <PriceBubble formatted={formatPrice(dm.price)} />}
-          </div>
-        ))}
+        {left.map((dm, i) => <DailyMenuItem key={dm.id} dm={dm} revealIndex={i} />)}
       </div>
       {hasTwoColumns && (
         <div className={`${styles.column} ${styles.columnRight}`}>
-          {right.map((dm, i) => (
-            <div
-              key={dm.id}
-              className={styles.product}
-              data-reveal=""
-              style={{ transitionDelay: `${(left.length + i) * 60}ms` }}
-            >
-              <div className={styles.productInfo}>
-                <p className={styles.productName}>
-                  Menú {dm.slot_number}{dm.title ? ` — ${dm.title}` : ''}
-                </p>
-                {dm.description && <p className={styles.productDesc}>{dm.description}</p>}
-              </div>
-              {dm.price != null && <PriceBubble formatted={formatPrice(dm.price)} />}
-            </div>
-          ))}
+          {right.map((dm, i) => <DailyMenuItem key={dm.id} dm={dm} revealIndex={left.length + i} />)}
         </div>
       )}
     </div>

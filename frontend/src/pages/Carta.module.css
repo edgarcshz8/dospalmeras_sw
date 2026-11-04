@@ -208,6 +208,48 @@
   padding: 24px 0;
 }
 
+/* ── Daily menu item with optional photo ── */
+.dmProduct {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px dashed rgba(81, 75, 73, 0.18);
+}
+
+.dmProduct:last-child {
+  border-bottom: none;
+}
+
+.dmProduct[data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.dmProduct[data-reveal="visible"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dmProduct[data-reveal],
+  .dmProduct[data-reveal="visible"] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.dmThumb {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--menu-red);
+  flex-shrink: 0;
+}
+
 
 /* ══════════════════════════════════════════════
    CHEF SECTION — dark band

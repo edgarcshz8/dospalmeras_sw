@@ -24,6 +24,7 @@ export interface DailyMenu {
   description: string | null;
   price: number | null;
   is_active: boolean;
+  image_url: string | null;
 }
 
 export interface User {

@@ -25,6 +25,8 @@ function DailyMenuCard({ menu, onUpdated, onDeleted }: DailyMenuCardProps) {
   const [price, setPrice] = useState(menu.price?.toString() ?? '');
   const [toggling, setToggling] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setTitle(menu.title ?? '');
@@ -32,6 +34,31 @@ function DailyMenuCard({ menu, onUpdated, onDeleted }: DailyMenuCardProps) {
     setPrice(menu.price?.toString() ?? '');
     setEditing(false);
   }, [menu.id]);
+
+  const uploadImage = async (file: File) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    const allowedExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    const ext = '.' + file.name.split('.').pop()?.toLowerCase();
+    if (!allowedTypes.includes(file.type) && !allowedExts.includes(ext)) {
+      alert('Solo se permiten imágenes JPG, PNG, GIF o WEBP.');
+      return;
+    }
+    setUploading(true);
+    try {
+      const form = new FormData();
+      form.append('image', file);
+      const res = await api.post<{ image_url: string; menu: DailyMenu }>(
+        `/api/upload/daily-menu/${menu.id}`,
+        form,
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+      );
+      onUpdated(res.data.menu);
+    } catch {
+      // 401 handled by interceptor
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const toggle = async () => {
     setToggling(true);
@@ -122,6 +149,11 @@ function DailyMenuCard({ menu, onUpdated, onDeleted }: DailyMenuCardProps) {
         </span>
       </button>
 
+      {menu.image_url
+        ? <img src={menu.image_url} alt="" className="dm-thumb" />
+        : <div className="dm-thumb dm-thumb--empty" />
+      }
+
       <div className="dm-card-info">
         <span className="dm-card-title">{menu.title ?? `Menú ${menu.slot_number}`}</span>
         {menu.description && <span className="dm-card-desc">{menu.description}</span>}
@@ -129,6 +161,21 @@ function DailyMenuCard({ menu, onUpdated, onDeleted }: DailyMenuCardProps) {
       </div>
 
       <div className="dm-card-actions">
+        <button
+          className="btn-icon"
+          title={uploading ? 'Subiendo…' : 'Subir foto'}
+          onClick={() => fileRef.current?.click()}
+          disabled={uploading}
+        >
+          {uploading ? '⏳' : '🖼️'}
+        </button>
+        <input
+          ref={fileRef}
+          type="file"
+          accept=".jpg,.jpeg,.png,.gif,.webp"
+          style={{ display: 'none' }}
+          onChange={e => { if (e.target.files?.[0]) uploadImage(e.target.files[0]); }}
+        />
         <button className="btn-icon" onClick={() => setEditing(true)} title="Editar">✏️</button>
         <button className="btn-icon btn-icon--del" onClick={del} title="Eliminar">🗑️</button>
       </div>

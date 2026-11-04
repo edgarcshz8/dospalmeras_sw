@@ -638,6 +638,21 @@
   color: #16a34a;
 }
 
+/* Thumbnail */
+.dm-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--admin-border);
+  flex-shrink: 0;
+}
+
+.dm-thumb--empty {
+  background: #f1f5f9;
+  border: 2px dashed #cbd5e1;
+}
+
 /* Card info */
 .dm-card-info {
   flex: 1;

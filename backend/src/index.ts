@@ -50,6 +50,10 @@ async function runMigrations() {
     await pool.query(
       `ALTER TABLE daily_menus DROP COLUMN IF EXISTS date`
     );
+    // Agregar columna image_url si no existe
+    await pool.query(
+      `ALTER TABLE daily_menus ADD COLUMN IF NOT EXISTS image_url VARCHAR(500) DEFAULT NULL`
+    );
   } catch (err) {
     console.error('Error en migración:', err);
   }
