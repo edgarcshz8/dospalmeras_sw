@@ -72,6 +72,8 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
+  filter: invert(1);
+  mix-blend-mode: screen;
 }
 
 .coverTagline {
@@ -302,6 +304,8 @@
   display: block;
   margin: 0 auto 10px;
   position: relative;
+  filter: invert(1);
+  mix-blend-mode: screen;
 }
 
 .footerNote {
