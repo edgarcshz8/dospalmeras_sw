@@ -570,94 +570,214 @@ export default function Admin() {
       return;
     }
 
+    const origin = window.location.origin;
     const esc = (s: string) =>
       s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const fmt = (p: number) => '$ ' + p.toLocaleString('es-CL');
 
-    const fmtPrice = (p: number) => '$ ' + p.toLocaleString('es-CL');
+    const getSub = (name: string): string => {
+      const n = name.toLowerCase();
+      if (n.includes('entrada')) return 'Para comenzar';
+      if (n.includes('sopa') || n.includes('caldo')) return 'Caldos y sopas';
+      if (n.includes('fondo') || n.includes('segundo') || n.includes('principal')) return 'Platos principales';
+      if (n.includes('pollo') || n.includes('ave')) return 'Aves de corral';
+      if (n.includes('carne') || n.includes('res')) return 'Carnes a la brasa';
+      if (n.includes('pescado') || n.includes('marisco')) return 'Del mar a tu mesa';
+      if (n.includes('arroz')) return 'Arroces especiales';
+      if (n.includes('pasta')) return 'Pastas artesanales';
+      if (n.includes('ensalada')) return 'Ensaladas frescas';
+      if (n.includes('postre') || n.includes('dulce')) return 'Dulces finales';
+      if (n.includes('bebida') || n.includes('refresco')) return 'Para refrescarse';
+      if (n.includes('menú') || n.includes('menu')) return 'Fresco y nutritivo';
+      return 'Sabor y tradición';
+    };
+
+    const linesSvg = '<svg class="lines-svg" viewBox="0 0 1200 220" preserveAspectRatio="none" aria-hidden="true">'
+      + '<path d="M-80,170 C180,90 500,175 820,112 C1020,72 1120,138 1280,96" fill="none" stroke="#F6E8D8" stroke-width="2" opacity="0.22"/>'
+      + '<path d="M-80,192 C240,145 560,192 880,155 C1060,132 1165,162 1280,136" fill="none" stroke="#F6E8D8" stroke-width="1.2" opacity="0.14"/>'
+      + '</svg>';
+
+    const waveSvg = '<svg class="wave-svg" viewBox="0 0 1200 72" preserveAspectRatio="none" aria-hidden="true">'
+      + '<path d="M0,72 L0,40 C160,10 320,58 500,30 C680,2 840,52 1010,24 C1080,10 1150,42 1200,20 L1200,72 Z" fill="#FFFFFF"/>'
+      + '</svg>';
+
+    const dots = '<div class="dots-row"><span class="dot-lg"></span><span class="dot-md"></span><span class="dot-sm"></span></div>';
 
     const renderItems = (items: MenuItem[]) => {
       if (!items.length) return '<p class="empty">Próximamente</p>';
       const mid = Math.ceil(items.length / 2);
-      const cols = [items.slice(0, mid), items.slice(mid)];
-      const colHtml = (col: MenuItem[]) => col.map(it => `
-        <div class="item">
-          <div class="item-info">
-            <span class="item-name">${esc(it.name)}</span>
-            ${it.description ? `<span class="item-desc">${esc(it.description)}</span>` : ''}
-          </div>
-          ${it.price != null ? `<span class="item-price">${fmtPrice(it.price)}</span>` : ''}
-        </div>`).join('');
-      return cols[1].length
-        ? `<div class="cols"><div class="col col-l">${colHtml(cols[0])}</div><div class="col col-r">${colHtml(cols[1])}</div></div>`
-        : `<div class="cols"><div class="col">${colHtml(cols[0])}</div></div>`;
+      const left = items.slice(0, mid);
+      const right = items.slice(mid);
+      const colHtml = (col: MenuItem[]) => col.map(it =>
+        '<div class="item">'
+        + '<div class="item-info">'
+        + '<span class="item-name">' + esc(it.name) + '</span>'
+        + (it.description ? '<span class="item-desc">' + esc(it.description) + '</span>' : '')
+        + '</div>'
+        + (it.price != null ? '<span class="price-bubble">' + fmt(it.price) + '</span>' : '')
+        + '</div>'
+      ).join('');
+      return right.length
+        ? '<div class="cols"><div class="col col-l">' + colHtml(left) + '</div><div class="col col-r">' + colHtml(right) + '</div></div>'
+        : '<div class="cols"><div class="col">' + colHtml(left) + '</div></div>';
     };
 
-    const sectionsHtml = secs.map(s => `
-      <div class="section">
-        <div class="sec-header">
-          <div class="sec-title">${esc(s.name.toUpperCase())}</div>
-          ${s.subtitle ? `<div class="sec-sub">${esc(s.subtitle)}</div>` : ''}
-        </div>
-        <div class="sec-body">${renderItems(s.items ?? [])}</div>
-      </div>`).join('');
+    const renderDailyItems = (items: DailyMenu[]) => {
+      if (!items.length) return '';
+      const mid = Math.ceil(items.length / 2);
+      const left = items.slice(0, mid);
+      const right = items.slice(mid);
+      const colHtml = (col: DailyMenu[]) => col.map(dm =>
+        '<div class="dm-item">'
+        + (dm.image_url ? '<img class="dm-thumb" src="' + dm.image_url + '" alt=""/>' : '')
+        + '<div class="item-info">'
+        + '<span class="item-name">' + esc(dm.title ?? ('Menú ' + dm.slot_number)) + '</span>'
+        + (dm.description ? '<span class="item-desc">' + esc(dm.description) + '</span>' : '')
+        + '</div>'
+        + (dm.price != null ? '<span class="price-bubble">' + fmt(dm.price) + '</span>' : '')
+        + '</div>'
+      ).join('');
+      return right.length
+        ? '<div class="cols"><div class="col col-l">' + colHtml(left) + '</div><div class="col col-r">' + colHtml(right) + '</div></div>'
+        : '<div class="cols"><div class="col">' + colHtml(left) + '</div></div>';
+    };
 
-    const html = `<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8"/>
-<title>Carta del Restaurante</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Poppins:wght@300;400&family=Dancing+Script:wght@700" rel="stylesheet"/>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Poppins',sans-serif;color:#211B1A;padding:14mm 16mm;font-size:9.5pt;background:#fff}
-.cover{text-align:center;margin-bottom:10mm;padding-bottom:6mm;border-bottom:2px solid #211B1A}
-.cover h1{font-family:'Dancing Script',cursive;font-size:32pt;line-height:1}
-.cover p{font-size:7pt;letter-spacing:.35em;text-transform:uppercase;opacity:.4;margin-top:3px}
-.section{margin-bottom:8mm;page-break-inside:avoid}
-.sec-header{background:#211B1A;color:#fff;padding:7px 14px;border-radius:3px 3px 0 0}
-.sec-title{font-family:'Montserrat',sans-serif;font-weight:900;font-size:11pt;text-transform:uppercase;letter-spacing:.04em}
-.sec-sub{font-size:7.5pt;opacity:.55;margin-top:1px}
-.sec-body{padding:4px 10px 2px}
-.cols{display:flex;gap:0}
-.col{flex:1;min-width:0}
-.col-l{padding-right:10px;border-right:1px dashed rgba(237,7,18,.25)}
-.col-r{padding-left:10px}
-.item{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px dashed rgba(81,75,73,.15)}
-.item:last-child{border-bottom:none}
-.item-info{flex:1;min-width:0}
-.item-name{font-family:'Montserrat',sans-serif;font-weight:700;font-size:9pt;color:#ED0712;display:block}
-.item-desc{font-size:7.5pt;color:#666;font-weight:300;display:block;margin-top:1px}
-.item-price{font-weight:700;font-size:9pt;white-space:nowrap;flex-shrink:0;padding-top:1px}
-.daily-slots{display:flex;gap:16px;padding:10px 14px;flex-wrap:wrap}
-.daily-slot{font-family:'Montserrat',sans-serif;font-weight:700;font-size:10pt;color:#211B1A;background:#f5f5f5;padding:6px 16px;border-radius:20px;border:1.5px solid #ccc}
-.empty{font-size:8pt;color:#aaa;font-style:italic;padding:8px 0}
-.footer{text-align:center;margin-top:10mm;padding-top:4mm;border-top:1px solid #ddd;font-size:7pt;color:#aaa;letter-spacing:.15em;text-transform:uppercase}
-@media print{body{padding:10mm 14mm}@page{margin:10mm}}
-</style>
-</head>
-<body>
-<div class="cover">
-  <h1>La Casona</h1>
-  <p>Restaurant · Cafetería</p>
-</div>
+    let photoCounter = 0;
+    const sectionSides = new Map<number, 'left' | 'right'>();
+    for (const s of secs) {
+      if (/sugerencia|chef/i.test(s.name)) {
+        sectionSides.set(s.id, 'right');
+      } else {
+        sectionSides.set(s.id, photoCounter % 2 === 0 ? 'right' : 'left');
+        photoCounter++;
+      }
+    }
 
-<div class="section">
-  <div class="sec-header">
-    <div class="sec-title">MENÚ DEL DÍA</div>
-    <div class="sec-sub">Fresco y nutritivo</div>
-  </div>
-  <div class="daily-slots">
-    <span class="daily-slot">Menú 1</span>
-    <span class="daily-slot">Menú 2</span>
-    <span class="daily-slot">Menú 3</span>
-  </div>
-</div>
+    const sectionsHtml = secs.map(s => {
+      if (/sugerencia|chef/i.test(s.name)) {
+        return '<div class="section">'
+          + '<div class="chef-band">'
+          + '<p class="chef-etiqueta">✦ Sugerencias del Chef ✦</p>'
+          + '<h2 class="chef-title">' + esc(s.name.toUpperCase()) + '</h2>'
+          + '<p class="chef-sub">Lo mejor de nuestra cocina</p>'
+          + '</div>'
+          + dots
+          + '<div class="sec-body">' + renderItems(s.items ?? []) + '</div>'
+          + '</div>';
+      }
+      const side = sectionSides.get(s.id) ?? 'right';
+      const sub = esc(s.subtitle ?? getSub(s.name));
+      const hasPhoto = !!s.image_url;
+      const photoHtml = hasPhoto
+        ? '<div class="photo-circle ' + (side === 'left' ? 'photo-left' : 'photo-right') + '">'
+          + '<img src="' + s.image_url! + '" alt=""/>'
+          + '</div>'
+        : '';
+      const textCls = hasPhoto
+        ? ('text-block ' + (side === 'right' ? 'text-photo-right' : 'text-photo-left'))
+        : 'text-block';
+      return '<div class="section">'
+        + '<div class="wave-wrapper">'
+        + '<div class="dark">'
+        + linesSvg
+        + '<div class="' + textCls + '">'
+        + '<h2 class="sec-title">' + esc(s.name.toUpperCase()) + '</h2>'
+        + '<p class="sec-subtitle">' + sub + '</p>'
+        + '</div>'
+        + waveSvg
+        + '</div>'
+        + photoHtml
+        + '</div>'
+        + dots
+        + '<div class="sec-body">' + renderItems(s.items ?? []) + '</div>'
+        + '</div>';
+    }).join('');
 
-${sectionsHtml}
+    const dailyHtml = dailyMenus.length > 0
+      ? '<div class="section">'
+        + '<div class="wave-wrapper">'
+        + '<div class="dark dark-plain">'
+        + linesSvg
+        + '<div class="text-block">'
+        + '<h2 class="sec-title">MENÚ DEL DÍA</h2>'
+        + '<p class="sec-subtitle">Fresco y nutritivo</p>'
+        + '</div>'
+        + waveSvg
+        + '</div>'
+        + '</div>'
+        + dots
+        + '<div class="sec-body">' + renderDailyItems(dailyMenus) + '</div>'
+        + '</div>'
+      : '';
 
-<div class="footer">Todos los precios incluyen IVA</div>
-</body>
-</html>`;
+    const css = [
+      '*{box-sizing:border-box;margin:0;padding:0}',
+      'body{font-family:\'Poppins\',sans-serif;color:#211B1A;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}',
+      '.cover{background:#211B1A;text-align:center;padding:60px 24px 0;overflow:hidden}',
+      '.cover-inner{padding-bottom:48px}',
+      '.cover-logo{height:130px;width:auto;display:block;margin:0 auto 16px;filter:invert(1);mix-blend-mode:screen}',
+      '.cover-tagline{font-size:.65rem;letter-spacing:.42em;text-transform:uppercase;color:rgba(246,232,216,.3);font-weight:300}',
+      '.section{margin-top:36px}',
+      '.wave-wrapper{position:relative}',
+      '.dark{background:#211B1A;min-height:195px;position:relative;overflow:hidden}',
+      '.dark-plain{min-height:148px}',
+      '.lines-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}',
+      '.text-block{padding:26px 40px 76px;position:relative;z-index:2}',
+      '.text-photo-right{padding-right:210px}',
+      '.text-photo-left{padding-left:210px}',
+      '.sec-title{font-family:\'Montserrat\',sans-serif;font-weight:900;font-size:2.3rem;color:#F6E8D8;text-transform:uppercase;line-height:.93;letter-spacing:-.01em;margin:0}',
+      '.sec-subtitle{font-family:\'Allura\',cursive;font-size:1.5rem;color:#ED0712;margin-top:8px}',
+      '.wave-svg{position:absolute;bottom:0;left:0;width:100%;height:72px;display:block}',
+      '.photo-circle{position:absolute;top:12px;width:160px;height:160px;border-radius:50%;border:4px solid #F6E8D8;overflow:hidden;z-index:10;box-shadow:0 6px 24px rgba(0,0,0,.38)}',
+      '.photo-right{right:20px}',
+      '.photo-left{left:20px}',
+      '.photo-circle img{width:100%;height:100%;object-fit:cover;display:block}',
+      '.dots-row{display:flex;align-items:center;gap:7px;padding:10px 40px 6px;background:#fff}',
+      '.dot-lg{width:11px;height:11px;border-radius:50%;background:#211B1A;opacity:.85;display:block;flex-shrink:0}',
+      '.dot-md{width:8px;height:8px;border-radius:50%;background:#211B1A;opacity:.65;display:block;flex-shrink:0}',
+      '.dot-sm{width:5px;height:5px;border-radius:50%;background:#211B1A;opacity:.45;display:block;flex-shrink:0}',
+      '.sec-body{padding:18px 40px 32px;background:#fff}',
+      '.cols{display:flex;gap:0}',
+      '.col{flex:1;min-width:0}',
+      '.col-l{padding-right:22px;border-right:1.5px solid rgba(237,7,18,.28)}',
+      '.col-r{padding-left:22px}',
+      '.item{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px dashed rgba(81,75,73,.18)}',
+      '.item:last-child{border-bottom:none}',
+      '.item-info{flex:1;min-width:0}',
+      '.item-name{font-family:\'Montserrat\',sans-serif;font-weight:700;font-size:.87rem;color:#ED0712;display:block;line-height:1.3;margin-bottom:3px}',
+      '.item-desc{font-weight:300;font-size:.7rem;color:#514B49;display:block;line-height:1.55}',
+      '.price-bubble{flex-shrink:0;display:inline-block;background:#ED0712;color:#fff;font-family:\'Montserrat\',sans-serif;font-weight:700;font-size:.72rem;padding:5px 11px 6px;border-radius:50px;white-space:nowrap;min-width:60px;text-align:center;align-self:flex-start;margin-top:3px}',
+      '.dm-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed rgba(81,75,73,.18)}',
+      '.dm-item:last-child{border-bottom:none}',
+      '.dm-thumb{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #ED0712;flex-shrink:0}',
+      '.chef-band{background:#211B1A;text-align:center;padding:34px 40px 30px;overflow:hidden}',
+      '.chef-etiqueta{font-family:\'Allura\',cursive;font-size:1.4rem;color:#ED0712;margin:0 0 6px}',
+      '.chef-title{font-family:\'Montserrat\',sans-serif;font-weight:900;font-size:2.3rem;color:#F6E8D8;text-transform:uppercase;letter-spacing:-.01em;line-height:.95;margin:0 0 8px}',
+      '.chef-sub{font-family:\'Allura\',cursive;font-size:1.2rem;color:#ED0712;opacity:.75;margin:0}',
+      '.empty{font-size:.72rem;color:#bbb;font-style:italic;text-align:center;padding:20px 0}',
+      '.footer-wrap{background:#211B1A;text-align:center;padding:36px 24px 44px;margin-top:44px}',
+      '.footer-logo{height:60px;width:auto;display:block;margin:0 auto 10px;filter:invert(1);mix-blend-mode:screen}',
+      '.footer-note{font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(246,232,216,.3)}',
+      '@media print{*{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}@page{size:A4;margin:8mm}.wave-wrapper{page-break-inside:avoid}}',
+    ].join('\n');
+
+    const html = '<!DOCTYPE html>\n<html lang="es">\n<head>\n'
+      + '<meta charset="UTF-8"/>\n'
+      + '<title>Carta del Restaurante</title>\n'
+      + '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Poppins:wght@300;400&family=Allura&display=swap" rel="stylesheet"/>\n'
+      + '<style>\n' + css + '\n</style>\n'
+      + '</head>\n<body>\n'
+      + '<div class="cover"><div class="cover-inner">'
+      + '<img src="' + origin + '/logo_blanco.webp" alt="Logo" class="cover-logo"/>'
+      + '<p class="cover-tagline">Carta de menú</p>'
+      + '</div></div>\n'
+      + dailyHtml + '\n'
+      + sectionsHtml + '\n'
+      + '<div class="footer-wrap">'
+      + '<img src="' + origin + '/logo_blanco.webp" alt="Logo" class="footer-logo"/>'
+      + '<p class="footer-note">Todos los precios incluyen IVA</p>'
+      + '</div>\n'
+      + '</body>\n</html>';
 
     const win = window.open('', '_blank');
     if (!win) {
@@ -667,7 +787,7 @@ ${sectionsHtml}
     win.document.write(html);
     win.document.close();
     win.focus();
-    setTimeout(() => win.print(), 600);
+    setTimeout(() => win.print(), 1200);
   };
 
   const addSection = async () => {
