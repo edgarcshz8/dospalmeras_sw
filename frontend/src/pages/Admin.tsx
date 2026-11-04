@@ -560,6 +560,116 @@ export default function Admin() {
 
   const doLogout = () => { logout(); navigate('/login'); };
 
+  const printMenu = async () => {
+    let secs: MenuSection[] = [];
+    try {
+      const res = await api.get<MenuSection[]>('/api/sections/public');
+      secs = res.data;
+    } catch {
+      alert('Error al cargar los datos de la carta.');
+      return;
+    }
+
+    const esc = (s: string) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    const fmtPrice = (p: number) => '$ ' + p.toLocaleString('es-CL');
+
+    const renderItems = (items: MenuItem[]) => {
+      if (!items.length) return '<p class="empty">Próximamente</p>';
+      const mid = Math.ceil(items.length / 2);
+      const cols = [items.slice(0, mid), items.slice(mid)];
+      const colHtml = (col: MenuItem[]) => col.map(it => `
+        <div class="item">
+          <div class="item-info">
+            <span class="item-name">${esc(it.name)}</span>
+            ${it.description ? `<span class="item-desc">${esc(it.description)}</span>` : ''}
+          </div>
+          ${it.price != null ? `<span class="item-price">${fmtPrice(it.price)}</span>` : ''}
+        </div>`).join('');
+      return cols[1].length
+        ? `<div class="cols"><div class="col col-l">${colHtml(cols[0])}</div><div class="col col-r">${colHtml(cols[1])}</div></div>`
+        : `<div class="cols"><div class="col">${colHtml(cols[0])}</div></div>`;
+    };
+
+    const sectionsHtml = secs.map(s => `
+      <div class="section">
+        <div class="sec-header">
+          <div class="sec-title">${esc(s.name.toUpperCase())}</div>
+          ${s.subtitle ? `<div class="sec-sub">${esc(s.subtitle)}</div>` : ''}
+        </div>
+        <div class="sec-body">${renderItems(s.items ?? [])}</div>
+      </div>`).join('');
+
+    const html = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<title>Carta del Restaurante</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Poppins:wght@300;400&family=Dancing+Script:wght@700" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Poppins',sans-serif;color:#211B1A;padding:14mm 16mm;font-size:9.5pt;background:#fff}
+.cover{text-align:center;margin-bottom:10mm;padding-bottom:6mm;border-bottom:2px solid #211B1A}
+.cover h1{font-family:'Dancing Script',cursive;font-size:32pt;line-height:1}
+.cover p{font-size:7pt;letter-spacing:.35em;text-transform:uppercase;opacity:.4;margin-top:3px}
+.section{margin-bottom:8mm;page-break-inside:avoid}
+.sec-header{background:#211B1A;color:#fff;padding:7px 14px;border-radius:3px 3px 0 0}
+.sec-title{font-family:'Montserrat',sans-serif;font-weight:900;font-size:11pt;text-transform:uppercase;letter-spacing:.04em}
+.sec-sub{font-size:7.5pt;opacity:.55;margin-top:1px}
+.sec-body{padding:4px 10px 2px}
+.cols{display:flex;gap:0}
+.col{flex:1;min-width:0}
+.col-l{padding-right:10px;border-right:1px dashed rgba(237,7,18,.25)}
+.col-r{padding-left:10px}
+.item{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px dashed rgba(81,75,73,.15)}
+.item:last-child{border-bottom:none}
+.item-info{flex:1;min-width:0}
+.item-name{font-family:'Montserrat',sans-serif;font-weight:700;font-size:9pt;color:#ED0712;display:block}
+.item-desc{font-size:7.5pt;color:#666;font-weight:300;display:block;margin-top:1px}
+.item-price{font-weight:700;font-size:9pt;white-space:nowrap;flex-shrink:0;padding-top:1px}
+.daily-slots{display:flex;gap:16px;padding:10px 14px;flex-wrap:wrap}
+.daily-slot{font-family:'Montserrat',sans-serif;font-weight:700;font-size:10pt;color:#211B1A;background:#f5f5f5;padding:6px 16px;border-radius:20px;border:1.5px solid #ccc}
+.empty{font-size:8pt;color:#aaa;font-style:italic;padding:8px 0}
+.footer{text-align:center;margin-top:10mm;padding-top:4mm;border-top:1px solid #ddd;font-size:7pt;color:#aaa;letter-spacing:.15em;text-transform:uppercase}
+@media print{body{padding:10mm 14mm}@page{margin:10mm}}
+</style>
+</head>
+<body>
+<div class="cover">
+  <h1>La Casona</h1>
+  <p>Restaurant · Cafetería</p>
+</div>
+
+<div class="section">
+  <div class="sec-header">
+    <div class="sec-title">MENÚ DEL DÍA</div>
+    <div class="sec-sub">Fresco y nutritivo</div>
+  </div>
+  <div class="daily-slots">
+    <span class="daily-slot">Menú 1</span>
+    <span class="daily-slot">Menú 2</span>
+    <span class="daily-slot">Menú 3</span>
+  </div>
+</div>
+
+${sectionsHtml}
+
+<div class="footer">Todos los precios incluyen IVA</div>
+</body>
+</html>`;
+
+    const win = window.open('', '_blank');
+    if (!win) {
+      alert('El navegador bloqueó la ventana emergente. Permite ventanas emergentes para esta página e intenta de nuevo.');
+      return;
+    }
+    win.document.write(html);
+    win.document.close();
+    win.focus();
+    setTimeout(() => win.print(), 600);
+  };
+
   const addSection = async () => {
     if (!newSectionName.trim()) return;
     const maxOrder = sections.reduce((m, s) => Math.max(m, s.display_order), 0);
@@ -584,6 +694,7 @@ export default function Admin() {
           <span className="admin-header-title">Panel de Administración</span>
         </div>
         <div className="admin-header-right">
+          <button className="btn-print-carta" onClick={printMenu}>🖨 Imprimir Carta</button>
           <a href="/" target="_blank" className="btn-view-carta">Ver Carta ↗</a>
           <span className="admin-user">👤 {user?.username}</span>
           <button className="btn-logout" onClick={doLogout}>Salir</button>

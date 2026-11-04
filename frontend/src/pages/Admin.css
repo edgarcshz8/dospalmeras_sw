@@ -43,6 +43,21 @@
   align-items: center;
   gap: 12px;
 }
+.btn-print-carta {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 6px;
+  padding: 5px 11px;
+  cursor: pointer;
+  font-family: 'Raleway', sans-serif;
+  transition: background 0.15s;
+}
+.btn-print-carta:hover {
+  background: rgba(255,255,255,0.15);
+}
+
 .btn-view-carta {
   font-size: 0.78rem;
   color: var(--gold);
