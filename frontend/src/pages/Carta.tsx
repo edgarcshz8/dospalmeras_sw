@@ -258,7 +258,6 @@ export default function Carta() {
 
       <footer className={styles.footer}>
         <img src="/logo_blanco.webp" alt="Logo" className={styles.footerLogo} />
-        <p className={styles.footerNote}>Todos los precios incluyen IVA</p>
       </footer>
     </div>
   );
