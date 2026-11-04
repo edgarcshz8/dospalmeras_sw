@@ -23,11 +23,14 @@ app.use('/api/items', itemsRouter);
 app.use('/api/daily-menu', dailyMenuRouter);
 app.use('/api/upload', uploadRouter);
 
-// Migración idempotente: elimina date de daily_menus si existe
+// Migración idempotente: elimina date y restricciones únicas en slot_number
 async function runMigrations() {
   try {
     await pool.query(
       `ALTER TABLE daily_menus DROP CONSTRAINT IF EXISTS daily_menus_slot_number_date_key`
+    );
+    await pool.query(
+      `ALTER TABLE daily_menus DROP CONSTRAINT IF EXISTS daily_menus_slot_number_key`
     );
     await pool.query(
       `ALTER TABLE daily_menus DROP COLUMN IF EXISTS date`
